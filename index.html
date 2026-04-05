@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>片思いカレンダー</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blush:#f2a7c3; --rose:#e8698a; --deep:#c0496d;
+  --cream:#fff5f8; --petal:#fde8f0; --text:#3d1a2a;
+  --muted:#9e6a7e; --card:#fffafc; --shadow:rgba(192,73,109,0.13);
+  --g1:rgba(242,167,195,0.18); --g2:rgba(232,213,245,0.2); --g3:rgba(248,210,225,0.14);
+}
+[data-theme=lavender]{--blush:#c9aaee;--rose:#9b6fd4;--deep:#6e3fa8;--cream:#f8f4ff;--petal:#ede4fb;--text:#2a1a3d;--muted:#7a5a9e;--card:#fcfaff;--shadow:rgba(110,63,168,0.12);--g1:rgba(201,170,238,0.18);--g2:rgba(180,150,230,0.18);--g3:rgba(220,200,250,0.14);}
+[data-theme=mint]{--blush:#8ed8c0;--rose:#3daa88;--deep:#1f7a60;--cream:#f2fcf9;--petal:#ddf4ec;--text:#0d2e24;--muted:#5a9080;--card:#f8fefc;--shadow:rgba(31,122,96,0.1);--g1:rgba(142,216,192,0.18);--g2:rgba(100,200,170,0.16);--g3:rgba(180,240,220,0.14);}
+[data-theme=peach]{--blush:#f5c89a;--rose:#e88a50;--deep:#c05e28;--cream:#fff8f2;--petal:#fdeede;--text:#3d1a0a;--muted:#a06040;--card:#fffaf6;--shadow:rgba(192,94,40,0.1);--g1:rgba(245,200,154,0.18);--g2:rgba(240,180,130,0.16);--g3:rgba(250,220,180,0.14);}
+[data-theme=sky]{--blush:#99cff5;--rose:#4a9fd4;--deep:#1a72a8;--cream:#f2f8ff;--petal:#ddeeff;--text:#0a1e3d;--muted:#4a70a0;--card:#f8fcff;--shadow:rgba(26,114,168,0.1);--g1:rgba(153,207,245,0.18);--g2:rgba(130,190,240,0.16);--g3:rgba(180,220,255,0.14);}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:‘Zen Maru Gothic’,sans-serif;background:var(–cream);color:var(–text);min-height:100vh;overflow-x:hidden;transition:background .35s;}
+body::before{content:’’;position:fixed;inset:0;pointer-events:none;z-index:0;
+background:radial-gradient(ellipse at 10% 20%,var(–g1) 0%,transparent 50%),
+radial-gradient(ellipse at 90% 80%,var(–g2) 0%,transparent 50%),
+radial-gradient(ellipse at 60% 10%,var(–g3) 0%,transparent 40%);}
+
+/* ── HEADER ── */
+.header{position:sticky;top:0;z-index:50;background:rgba(255,245,248,0.88);backdrop-filter:blur(12px);border-bottom:1px solid var(–petal);padding:0 16px;display:flex;align-items:center;height:54px;gap:10px;}
+[data-theme] .header{background:rgba(248,244,255,0.88);}
+[data-theme=mint] .header{background:rgba(242,252,249,0.88);}
+[data-theme=peach] .header{background:rgba(255,248,242,0.88);}
+[data-theme=sky] .header{background:rgba(242,248,255,0.88);}
+.header h1{font-family:‘Klee One’,cursive;font-size:1.25rem;color:var(–deep);letter-spacing:.05em;font-weight:600;flex:1;}
+.theme-btn{position:relative;width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;transition:transform .2s;flex-shrink:0;}
+.theme-btn:hover{transform:scale(1.12);}
+.theme-btn svg{width:16px;height:16px;position:absolute;inset:0;margin:auto;}
+.theme-panel{position:absolute;top:44px;right:0;background:var(–card);border-radius:14px;padding:10px 12px;box-shadow:0 8px 28px var(–shadow);display:none;flex-direction:column;gap:8px;z-index:200;min-width:130px;}
+.theme-panel.open{display:flex;}
+.theme-panel-label{font-size:0.7rem;color:var(–muted);font-weight:600;letter-spacing:.05em;}
+.swatches{display:flex;gap:7px;align-items:center;}
+.swatch{width:20px;height:20px;border-radius:50%;border:2.5px solid transparent;cursor:pointer;transition:transform .18s,border-color .18s;outline:none;}
+.swatch:hover{transform:scale(1.2);}
+.swatch.active{border-color:var(–deep);transform:scale(1.2);}
+.sw-pink{background:linear-gradient(135deg,#f2a7c3,#e8698a);}
+.sw-lavender{background:linear-gradient(135deg,#c9aaee,#9b6fd4);}
+.sw-mint{background:linear-gradient(135deg,#8ed8c0,#3daa88);}
+.sw-peach{background:linear-gradient(135deg,#f5c89a,#e88a50);}
+.sw-sky{background:linear-gradient(135deg,#99cff5,#4a9fd4);}
+.theme-wrap{position:relative;}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:6px;padding:14px 16px 0;max-width:900px;margin:0 auto;position:relative;z-index:1;}
+.tab{padding:7px 18px;border-radius:999px;border:2px solid var(–blush);background:transparent;color:var(–rose);font-family:‘Zen Maru Gothic’,sans-serif;font-size:0.85rem;cursor:pointer;transition:all .2s;font-weight:500;}
+.tab:hover{background:var(–petal);}
+.tab.active{background:var(–rose);color:white;border-color:var(–rose);}
+
+/* ── MAIN ── */
+.app{max-width:900px;margin:0 auto;padding:14px 16px 80px;position:relative;z-index:1;}
+.section{display:none;animation:fadeIn .35s ease;}
+.section.active{display:block;}
+
+/* ── PERSON CARDS ── */
+.persons-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:16px;}
+.person-card{background:var(–card);border-radius:18px;padding:18px;box-shadow:0 3px 16px var(–shadow);cursor:pointer;transition:all .22s;border:2px solid transparent;position:relative;overflow:hidden;}
+.person-card::before{content:’’;position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(–blush),var(–rose));border-radius:18px 18px 0 0;}
+.person-card:hover{transform:translateY(-2px);box-shadow:0 7px 22px var(–shadow);}
+.person-card.selected-card{border-color:var(–rose);}
+.p-emoji{font-size:1.8rem;margin-bottom:6px;}
+.p-name{font-weight:700;font-size:1rem;color:var(–deep);}
+.p-since{font-size:0.7rem;color:var(–muted);margin-top:3px;}
+.p-days{margin-top:8px;font-size:1.4rem;font-family:‘Klee One’,cursive;color:var(–rose);font-weight:600;}
+.p-days span{font-size:0.65rem;color:var(–muted);font-family:‘Zen Maru Gothic’,sans-serif;}
+.p-like{font-size:0.7rem;color:var(–muted);margin-top:2px;}
+.del-btn{position:absolute;top:9px;right:10px;background:none;border:none;font-size:.85rem;cursor:pointer;opacity:0;transition:opacity .2s;color:var(–deep);}
+.person-card:hover .del-btn{opacity:.6;}
+.btn-add-new{width:100%;padding:14px;border-radius:14px;border:2px dashed var(–blush);background:transparent;color:var(–muted);font-family:‘Zen Maru Gothic’,sans-serif;font-size:.9rem;cursor:pointer;transition:all .2s;margin-top:4px;}
+.btn-add-new:hover{background:var(–petal);color:var(–rose);border-color:var(–rose);}
+
+/* ── ADD FORM ── */
+.add-card{background:var(–card);border-radius:18px;padding:22px;box-shadow:0 3px 16px var(–shadow);border:2px dashed var(–blush);animation:fadeIn .35s ease;margin-bottom:16px;}
+.add-card h2{font-size:1rem;color:var(–deep);margin-bottom:14px;}
+.form-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+.form-group{display:flex;flex-direction:column;gap:4px;flex:1;min-width:130px;}
+label{font-size:0.72rem;color:var(–muted);font-weight:500;}
+input[type=text],input[type=date],textarea{border:2px solid var(–petal);border-radius:10px;padding:8px 11px;font-family:‘Zen Maru Gothic’,sans-serif;font-size:.88rem;color:var(–text);background:white;outline:none;transition:border-color .2s;width:100%;}
+input:focus,textarea:focus{border-color:var(–rose);}
+textarea{resize:vertical;min-height:72px;}
+.emoji-row{display:flex;gap:6px;flex-wrap:wrap;}
+.emoji-opt{font-size:1.4rem;cursor:pointer;padding:4px 7px;border-radius:8px;border:2px solid transparent;transition:all .15s;}
+.emoji-opt:hover{background:var(–petal);}
+.emoji-opt.selected{border-color:var(–rose);background:var(–petal);}
+.btn{padding:9px 20px;border-radius:999px;border:none;font-family:‘Zen Maru Gothic’,sans-serif;font-size:.88rem;cursor:pointer;font-weight:700;transition:all .2s;}
+.btn-primary{background:linear-gradient(135deg,var(–rose),var(–deep));color:white;}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 14px var(–shadow);}
+.btn-secondary{background:var(–petal);color:var(–rose);}
+.btn-secondary:hover{background:var(–blush);color:white;}
+.like-row{display:flex;align-items:center;gap:10px;margin:6px 0;}
+.like-row input[type=range]{flex:1;padding:0;accent-color:var(–rose);border:none;}
+.like-val{font-weight:700;color:var(–rose);font-size:1rem;min-width:28px;text-align:center;}
+
+/* ── CALENDAR VIEW ── */
+.cal-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.cal-header h2{font-family:‘Klee One’,cursive;font-size:1.1rem;color:var(–deep);font-weight:600;}
+.cal-person-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.cal-tab{padding:5px 14px;border-radius:999px;border:2px solid var(–blush);background:white;color:var(–muted);font-size:.78rem;cursor:pointer;transition:all .2s;font-family:‘Zen Maru Gothic’,sans-serif;}
+.cal-tab.active{background:var(–rose);color:white;border-color:var(–rose);}
+.month-nav{display:flex;align-items:center;gap:10px;}
+.nav-btn{width:30px;height:30px;border-radius:50%;border:2px solid var(–blush);background:white;color:var(–rose);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.nav-btn:hover{background:var(–rose);color:white;border-color:var(–rose);}
+.month-label{font-family:‘Klee One’,cursive;font-size:1rem;color:var(–deep);min-width:90px;text-align:center;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:20px;}
+.cal-dow{text-align:center;font-size:.65rem;color:var(–muted);padding:4px 0;font-weight:600;}
+.cal-dow:first-child{color:#e06060;}
+.cal-dow:last-child{color:#6080d0;}
+.cal-cell{min-height:64px;border-radius:10px;padding:4px;background:white;border:1.5px solid var(–petal);cursor:pointer;transition:all .18s;position:relative;display:flex;flex-direction:column;}
+.cal-cell:hover{border-color:var(–rose);box-shadow:0 2px 8px var(–shadow);}
+.cal-cell.empty{background:transparent;border-color:transparent;cursor:default;}
+.cal-cell.today{border-color:var(–rose);background:var(–petal);}
+.cal-cell.has-entry{background:var(–petal);}
+.cal-cell.has-entry::after{content:’’;position:absolute;bottom:4px;right:4px;width:6px;height:6px;border-radius:50%;background:var(–rose);}
+.cal-date{font-size:.68rem;font-weight:700;color:var(–text);line-height:1;}
+.cal-cell.sun .cal-date{color:#e06060;}
+.cal-cell.sat .cal-date{color:#6080d0;}
+.cal-thumb{width:100%;flex:1;object-fit:cover;border-radius:6px;margin-top:3px;display:block;}
+.cal-like-dot{font-size:.55rem;margin-top:2px;color:var(–rose);line-height:1;}
+.cal-mood{font-size:.75rem;margin-top:1px;}
+
+/* ── DAY DETAIL MODAL ── */
+.overlay{position:fixed;inset:0;background:rgba(40,10,20,.38);backdrop-filter:blur(6px);z-index:300;display:flex;align-items:center;justify-content:center;padding:16px;animation:fadeIn .2s ease;}
+.day-modal{background:var(–card);border-radius:22px;padding:24px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px var(–shadow);animation:slideUp .3s ease;}
+.day-modal h2{font-family:‘Klee One’,cursive;font-size:1.1rem;color:var(–deep);margin-bottom:4px;}
+.day-modal .person-badge{font-size:.78rem;color:var(–rose);margin-bottom:14px;font-weight:600;}
+.entry-section{margin-bottom:16px;}
+.entry-section h3{font-size:.78rem;color:var(–muted);font-weight:600;letter-spacing:.04em;margin-bottom:8px;}
+.mood-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
+.mood-btn{padding:5px 10px;border-radius:999px;border:2px solid var(–petal);background:white;font-size:.82rem;cursor:pointer;transition:all .15s;font-family:‘Zen Maru Gothic’,sans-serif;}
+.mood-btn.sel{border-color:var(–rose);background:var(–petal);}
+.photo-preview{width:100%;border-radius:12px;object-fit:cover;max-height:180px;margin-top:8px;display:block;}
+.photo-upload{display:flex;align-items:center;gap:8px;margin-top:6px;}
+.photo-upload label{padding:7px 14px;border-radius:999px;border:2px solid var(–blush);background:white;color:var(–rose);font-size:.8rem;cursor:pointer;transition:all .2s;font-family:‘Zen Maru Gothic’,sans-serif;font-weight:600;}
+.photo-upload label:hover{background:var(–petal);}
+.photo-upload input{display:none;}
+.existing-entry{background:var(–petal);border-radius:12px;padding:12px;margin-bottom:10px;}
+.existing-entry .e-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.existing-entry .e-mood{font-size:.9rem;}
+.existing-entry .e-like{font-size:.75rem;color:var(–rose);font-weight:700;}
+.existing-entry .e-text{font-size:.82rem;line-height:1.6;color:var(–text);}
+.existing-entry .e-img{width:100%;border-radius:8px;margin-top:8px;object-fit:cover;max-height:150px;}
+.e-del{background:none;border:none;cursor:pointer;color:var(–muted);font-size:.8rem;opacity:.5;}
+.e-del:hover{opacity:1;}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap;}
+
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-bottom:20px;}
+.stat-card{background:var(–card);border-radius:16px;padding:18px;box-shadow:0 3px 14px var(–shadow);text-align:center;}
+.stat-num{font-family:‘Klee One’,cursive;font-size:2rem;color:var(–deep);font-weight:600;}
+.stat-label{font-size:.72rem;color:var(–muted);margin-top:3px;}
+.person-stat{background:var(–card);border-radius:16px;padding:16px;box-shadow:0 3px 14px var(–shadow);margin-bottom:12px;}
+.ps-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.ps-name{font-weight:700;color:var(–deep);font-size:.95rem;}
+.ps-days{font-size:.75rem;color:var(–muted);}
+.like-bar{height:6px;border-radius:999px;background:var(–petal);overflow:hidden;margin:6px 0;}
+.like-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(–blush),var(–deep));transition:width .5s;}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:44px 20px;color:var(–muted);}
+.empty .ei{font-size:2.6rem;margin-bottom:10px;}
+.empty p{font-size:.88rem;}
+
+/* ── CONFIRM MODAL ── */
+.conf-modal{background:white;border-radius:20px;padding:24px;max-width:360px;width:100%;box-shadow:0 16px 48px rgba(192,73,109,.22);animation:slideUp .3s ease;}
+.conf-modal h2{font-size:1.05rem;color:var(–deep);margin-bottom:6px;}
+.conf-modal p{font-size:.82rem;color:var(–muted);margin-bottom:18px;}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:none;}}
+</style>
+
+</head>
+<body>
+
+<!-- HEADER -->
+
+<div class="header">
+  <h1>片思いカレンダー</h1>
+  <div class="theme-wrap">
+    <button class="theme-btn" id="theme-toggle-btn" onclick="toggleThemePanel()" style="background:linear-gradient(135deg,var(--blush),var(--rose));border:2.5px solid white;">
+      <svg viewBox="0 0 24 24" fill="white"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
+    </button>
+    <div class="theme-panel" id="theme-panel">
+      <div class="theme-panel-label">カラーテーマ</div>
+      <div class="swatches">
+        <button class="swatch sw-pink active"     title="ピンク"     onclick="setTheme('pink',this)"></button>
+        <button class="swatch sw-lavender"        title="ラベンダー" onclick="setTheme('lavender',this)"></button>
+        <button class="swatch sw-mint"            title="ミント"     onclick="setTheme('mint',this)"></button>
+        <button class="swatch sw-peach"           title="ピーチ"     onclick="setTheme('peach',this)"></button>
+        <button class="swatch sw-sky"             title="スカイ"     onclick="setTheme('sky',this)"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('home',this)">💗 片思い中</button>
+  <button class="tab" onclick="showTab('cal',this)">📅 カレンダー</button>
+  <button class="tab" onclick="showTab('stats',this)">✨ 統計</button>
+</div>
+
+<div class="app">
+  <!-- HOME -->
+  <div id="tab-home" class="section active">
+    <div id="persons-grid" class="persons-grid"></div>
+    <div id="add-area"></div>
+  </div>
+
+  <!-- CALENDAR -->
+
+  <div id="tab-cal" class="section">
+    <div class="cal-person-tabs" id="cal-person-tabs"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+      <div class="month-nav">
+        <button class="nav-btn" onclick="changeMonth(-1)">‹</button>
+        <div class="month-label" id="month-label"></div>
+        <button class="nav-btn" onclick="changeMonth(1)">›</button>
+      </div>
+    </div>
+    <div id="cal-grid-wrap"></div>
+  </div>
+
+  <!-- STATS -->
+
+  <div id="tab-stats" class="section">
+    <div id="stats-content"></div>
+  </div>
+</div>
+
+<!-- DAY MODAL -->
+
+<div id="day-overlay" class="overlay" style="display:none" onclick="closeDayModal(event)">
+  <div class="day-modal" onclick="event.stopPropagation()">
+    <h2 id="dm-title"></h2>
+    <div class="person-badge" id="dm-person"></div>
+    <div id="dm-existing"></div>
+    <div id="dm-form"></div>
+    <div class="modal-btns" id="dm-btns"></div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+
+<div id="conf-overlay" class="overlay" style="display:none" onclick="closeConf(event)">
+  <div class="conf-modal" onclick="event.stopPropagation()">
+    <h2 id="conf-title"></h2>
+    <p id="conf-msg"></p>
+    <div style="display:flex;gap:8px;justify-content:flex-end;" id="conf-btns"></div>
+  </div>
+</div>
+
+<script>
+// ── THEME ──────────────────────────────────────────────────────
+function setTheme(t,el){
+  document.body.setAttribute('data-theme', t==='pink'?'':t);
+  document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('active'));
+  if(el)el.classList.add('active');
+  localStorage.setItem('cc-theme',t);
+}
+function toggleThemePanel(){
+  document.getElementById('theme-panel').classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  var w=document.getElementById('theme-panel');
+  if(!document.querySelector('.theme-wrap').contains(e.target)) w.classList.remove('open');
+});
+(function(){
+  var t=localStorage.getItem('cc-theme')||'pink';
+  if(t!=='pink')document.body.setAttribute('data-theme',t);
+  window.addEventListener('DOMContentLoaded',function(){
+    var el=document.querySelector('.sw-'+t);
+    if(el){document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('active'));el.classList.add('active');}
+  });
+})();
+
+// ── DATA ──────────────────────────────────────────────────────
+var DB_KEY='crushcal2';
+var data=JSON.parse(localStorage.getItem(DB_KEY)||'{"persons":[],"entries":[]}');
+function save(){localStorage.setItem(DB_KEY,JSON.stringify(data));}
+
+// entries: {id, personId, date, mood, like, text, photo(base64)}
+
+// ── TABS ──────────────────────────────────────────────────────
+function showTab(tab,el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  el.classList.add('active');
+  if(tab==='home')renderHome();
+  if(tab==='cal'){calPersonId=data.persons.length?data.persons[0].id:null;renderCal();}
+  if(tab==='stats')renderStats();
+}
+
+// ── HOME ──────────────────────────────────────────────────────
+var showAddForm=false, selEmoji='💗';
+var emojis=['💗','🌸','🌹','⭐','🦋','🌙','🌈','🍀','🎀','💫'];
+
+function renderHome(){
+  var grid=document.getElementById('persons-grid');
+  var addArea=document.getElementById('add-area');
+  if(!data.persons.length&&!showAddForm){
+    grid.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="ei">💌</div><p>まだ片思い中の人がいません<br>下のボタンから追加しよう！</p></div>';
+  } else {
+    grid.innerHTML=data.persons.map(function(p,i){
+      var days=getDays(p.since);
+      var entries=data.entries.filter(function(e){return e.personId===p.id;});
+      var lastLike=entries.length?entries.sort(function(a,b){return b.date.localeCompare(a.date);})[0].like:'-';
+      return '<div class="person-card">'
+        +'<button class="del-btn" onclick="delPerson('+i+',event)">✕</button>'
+        +'<div class="p-emoji">'+p.emoji+'</div>'
+        +'<div class="p-name">'+p.name+'</div>'
+        +'<div class="p-since">好きになった日: '+fmtDate(p.since)+'</div>'
+        +'<div class="p-days">'+days+'<span> 日間</span></div>'
+        +'<div class="p-like">最新の好き度: '+(lastLike==='-'?'-':lastLike+'/100')+'</div>'
+        +'</div>';
+    }).join('');
+  }
+  if(showAddForm){
+    addArea.innerHTML='<div class="add-card">'
+      +'<h2>💕 新しい片思いを追加</h2>'
+      +'<div class="form-row">'
+      +'<div class="form-group"><label>呼び名</label><input type="text" id="n-name" placeholder="例：Kくん、花ちゃん"></div>'
+      +'<div class="form-group"><label>好きになった日</label><input type="date" id="n-since" value="'+today()+'"></div>'
+      +'</div>'
+      +'<div class="form-group" style="margin-bottom:12px"><label>出会った日（任意）</label><input type="date" id="n-met"></div>'
+      +'<div class="form-group" style="margin-bottom:12px"><label>アイコン</label><div class="emoji-row">'
+      +emojis.map(function(e){return '<span class="emoji-opt'+(e===selEmoji?' selected':'')+'" onclick="pickEmoji(\''+e+'\',this)">'+e+'</span>';}).join('')
+      +'</div></div>'
+      +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
+      +'<button class="btn btn-primary" onclick="addPerson()">追加する 💌</button>'
+      +'<button class="btn btn-secondary" onclick="showAddForm=false;renderHome()">キャンセル</button>'
+      +'</div></div>';
+  } else {
+    addArea.innerHTML='<button class="btn-add-new" onclick="showAddForm=true;renderHome()">＋ 新しい片思いを追加する</button>';
+  }
+}
+
+function pickEmoji(e,el){
+  selEmoji=e;
+  document.querySelectorAll('.emoji-opt').forEach(x=>x.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function addPerson(){
+  var name=document.getElementById('n-name').value.trim();
+  var since=document.getElementById('n-since').value;
+  var met=document.getElementById('n-met').value;
+  if(!name){alert('呼び名を入力してね');return;}
+  if(!since){alert('好きになった日を選んでね');return;}
+  data.persons.push({id:Date.now().toString(),name:name,since:since,met:met,emoji:selEmoji});
+  save(); showAddForm=false; selEmoji='💗'; renderHome();
+}
+function delPerson(i,e){
+  e.stopPropagation();
+  var p=data.persons[i];
+  showConf(p.emoji+' '+p.name+' を削除しますか？','関連する記録も全て削除されます。',[
+    {label:'キャンセル',cls:'btn-secondary',fn:closeConf},
+    {label:'削除する',cls:'btn-primary',fn:function(){
+      data.entries=data.entries.filter(function(d){return d.personId!==p.id;});
+      data.persons.splice(i,1); save(); closeConf(); renderHome();
+    }}
+  ]);
+}
+
+// ── CALENDAR ──────────────────────────────────────────────────
+var calPersonId=null;
+var calYear=new Date().getFullYear(), calMonth=new Date().getMonth();
+
+function renderCal(){
+  var tabsEl=document.getElementById('cal-person-tabs');
+  if(!data.persons.length){
+    tabsEl.innerHTML='';
+    document.getElementById('cal-grid-wrap').innerHTML='<div class="empty"><div class="ei">💌</div><p>先にホームで片思い中の人を追加してね</p></div>';
+    document.getElementById('month-label').textContent='';
+    return;
+  }
+  if(!calPersonId||!data.persons.find(function(p){return p.id===calPersonId;})) calPersonId=data.persons[0].id;
+
+  tabsEl.innerHTML=data.persons.map(function(p){
+    return '<button class="cal-tab'+(p.id===calPersonId?' active':'')+'" onclick="selectCalPerson(\''+p.id+'\')">'+p.emoji+' '+p.name+'</button>';
+  }).join('');
+
+  renderCalGrid();
+}
+
+function selectCalPerson(id){
+  calPersonId=id;
+  renderCal();
+}
+
+function changeMonth(d){
+  calMonth+=d;
+  if(calMonth>11){calMonth=0;calYear++;}
+  if(calMonth<0){calMonth=11;calYear--;}
+  renderCalGrid();
+}
+
+function renderCalGrid(){
+  var person=data.persons.find(function(p){return p.id===calPersonId;});
+  document.getElementById('month-label').textContent=calYear+'年 '+(calMonth+1)+'月';
+  var wrap=document.getElementById('cal-grid-wrap');
+  var today_s=today();
+  var firstDay=new Date(calYear,calMonth,1).getDay();
+  var daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+
+  var html='<div class="cal-grid">';
+  var dows=['日','月','火','水','木','金','土'];
+  dows.forEach(function(d){html+='<div class="cal-dow">'+d+'</div>';});
+
+  for(var i=0;i<firstDay;i++) html+='<div class="cal-cell empty"></div>';
+
+  for(var d=1;d<=daysInMonth;d++){
+    var dateStr=calYear+'-'+pad(calMonth+1)+'-'+pad(d);
+    var dow=(firstDay+d-1)%7;
+    var isToday=dateStr===today_s;
+    var entries=data.entries.filter(function(e){return e.personId===calPersonId&&e.date===dateStr;});
+    var hasEntry=entries.length>0;
+    var lastEntry=hasEntry?entries[entries.length-1]:null;
+    var isMet=person&&person.met===dateStr;
+    var isSince=person&&person.since===dateStr;
+
+    var cls='cal-cell'+(dow===0?' sun':dow===6?' sat':'')+(isToday?' today':'')+(hasEntry?' has-entry':'');
+    html+='<div class="'+cls+'" onclick="openDay(\''+dateStr+'\')">';
+    html+='<div class="cal-date">'+d+(isMet?'<span style="color:var(--rose);margin-left:2px">💬</span>':isSince?'<span style="margin-left:2px">💗</span>':'')+'</div>';
+    if(lastEntry){
+      if(lastEntry.photo){
+        html+='<img class="cal-thumb" src="'+lastEntry.photo+'" alt="">';
+      } else {
+        if(lastEntry.mood) html+='<div class="cal-mood">'+lastEntry.mood+'</div>';
+        if(lastEntry.like) html+='<div class="cal-like-dot">'+heartStr(lastEntry.like)+'</div>';
+      }
+    }
+    html+='</div>';
+  }
+  html+='</div>';
+
+  // legend
+  if(person){
+    html+='<div style="display:flex;gap:12px;font-size:.72rem;color:var(--muted);margin-top:4px;flex-wrap:wrap">';
+    if(person.since) html+='<span>💗 好きになった日</span>';
+    if(person.met) html+='<span>💬 出会った日</span>';
+    html+='<span>● 記録あり</span></div>';
+  }
+  wrap.innerHTML=html;
+}
+
+function heartStr(like){
+  var n=Math.round(like/25);
+  var s='';
+  for(var i=0;i<n;i++) s+='♥';
+  return s;
+}
+
+// ── DAY MODAL ──────────────────────────────────────────────────
+var dmDate=null, dmPersonId=null, dmMood='', dmPhotoB64=null;
+
+function openDay(dateStr){
+  dmDate=dateStr; dmPersonId=calPersonId; dmMood=''; dmPhotoB64=null;
+  var person=data.persons.find(function(p){return p.id===calPersonId;});
+  var entries=data.entries.filter(function(e){return e.personId===dmPersonId&&e.date===dmDate;});
+  var d=new Date(dateStr); var wd=['日','月','火','水','木','金','土'][d.getDay()];
+  document.getElementById('dm-title').textContent=fmtDate(dateStr)+'（'+wd+'）';
+  document.getElementById('dm-person').textContent=person?person.emoji+' '+person.name:'';
+
+  // existing entries
+  var exHtml='';
+  if(entries.length){
+    exHtml='<div class="entry-section"><h3>記録済み</h3>';
+    entries.forEach(function(en){
+      exHtml+='<div class="existing-entry">'
+        +'<div class="e-top"><span class="e-mood">'+(en.mood||'')+'</span>'
+        +'<span class="e-like">'+(en.like?'好き度 '+en.like+'/100':'')+'</span>'
+        +'<button class="e-del" onclick="delEntry(\''+en.id+'\')">🗑</button></div>'
+        +(en.text?'<div class="e-text">'+en.text+'</div>':'')
+        +(en.photo?'<img class="e-img" src="'+en.photo+'">':'')
+        +'</div>';
+    });
+    exHtml+='</div>';
+  }
+  document.getElementById('dm-existing').innerHTML=exHtml;
+
+  // new entry form
+  var fHtml='<div class="entry-section"><h3>この日に記録を追加</h3>'
+    +'<label style="font-size:.72rem;color:var(--muted);font-weight:500;">気分</label>'
+    +'<div class="mood-row" style="margin-bottom:10px">'
+    +'<button class="mood-btn" onclick="dmSelectMood(this,\'🥰\')">🥰 ときめき</button>'
+    +'<button class="mood-btn" onclick="dmSelectMood(this,\'😊\')">😊 普通</button>'
+    +'<button class="mood-btn" onclick="dmSelectMood(this,\'💭\')">💭 切ない</button>'
+    +'<button class="mood-btn" onclick="dmSelectMood(this,\'😔\')">😔 つらい</button>'
+    +'</div>'
+    +'<label style="font-size:.72rem;color:var(--muted);font-weight:500;">好き度</label>'
+    +'<div class="like-row"><span>💔</span><input type="range" id="dm-like" min="1" max="100" value="70" oninput="document.getElementById(\'dm-like-val\').textContent=this.value"><span>💖</span><span class="like-val" id="dm-like-val">70</span></div>'
+    +'<label style="font-size:.72rem;color:var(--muted);font-weight:500;display:block;margin-bottom:4px;margin-top:8px;">日記</label>'
+    +'<textarea id="dm-text" placeholder="今日あったこと…" style="margin-bottom:10px;"></textarea>'
+
+```
++'<label style="font-size:.72rem;color:var(--muted);font-weight:500;display:block;margin-bottom:6px;">写真</label>'
++'<div class="photo-upload"><label for="dm-photo-input">📷 写真を選ぶ</label><input type="file" id="dm-photo-input" accept="image/*" onchange="handlePhoto(this)"></div>'
++'<img id="dm-photo-preview" style="display:none;width:100%;border-radius:10px;margin-top:8px;max-height:160px;object-fit:cover;">'
++'</div>';
+```
+
+document.getElementById(‘dm-form’).innerHTML=fHtml;
+document.getElementById(‘dm-btns’).innerHTML=’<button class="btn btn-secondary" onclick="closeDayModal()">閉じる</button><button class="btn btn-primary" onclick="saveEntry()">保存する 💌</button>’;
+document.getElementById(‘day-overlay’).style.display=‘flex’;
+}
+
+function dmSelectMood(el,mood){
+dmMood=mood;
+document.querySelectorAll(’.mood-btn’).forEach(function(x){x.classList.remove(‘sel’);});
+el.classList.add(‘sel’);
+}
+
+function handlePhoto(input){
+var file=input.files[0];
+if(!file)return;
+var reader=new FileReader();
+reader.onload=function(e){
+dmPhotoB64=e.target.result;
+var img=document.getElementById(‘dm-photo-preview’);
+img.src=dmPhotoB64; img.style.display=‘block’;
+};
+reader.readAsDataURL(file);
+}
+
+function saveEntry(){
+var like=parseInt(document.getElementById(‘dm-like’).value);
+var text=document.getElementById(‘dm-text’).value.trim();
+data.entries.push({id:Date.now().toString(),personId:dmPersonId,date:dmDate,mood:dmMood,like:like,text:text,photo:dmPhotoB64||null});
+save();
+closeDayModal();
+renderCalGrid();
+}
+
+function delEntry(id){
+data.entries=data.entries.filter(function(e){return e.id!==id;});
+save();
+openDay(dmDate);
+renderCalGrid();
+}
+
+function closeDayModal(e){
+if(e&&e.target!==document.getElementById(‘day-overlay’))return;
+document.getElementById(‘day-overlay’).style.display=‘none’;
+}
+
+// ── STATS ──────────────────────────────────────────────────────
+function renderStats(){
+var el=document.getElementById(‘stats-content’);
+if(!data.persons.length){
+el.innerHTML=’<div class="empty"><div class="ei">✨</div><p>片思い中の人を追加すると統計が見られます</p></div>’;
+return;
+}
+var totalDays=data.persons.reduce(function(s,p){return s+getDays(p.since);},0);
+var html=’<div class="stats-grid">’
++’<div class="stat-card"><div class="stat-num">’+data.persons.length+’</div><div class="stat-label">片思い中の人数</div></div>’
++’<div class="stat-card"><div class="stat-num">’+totalDays+’</div><div class="stat-label">合計片思い日数</div></div>’
++’<div class="stat-card"><div class="stat-num">’+data.entries.length+’</div><div class="stat-label">記録の数</div></div>’
++’</div>’;
+
+data.persons.forEach(function(p){
+var entries=data.entries.filter(function(e){return e.personId===p.id;}).sort(function(a,b){return a.date.localeCompare(b.date);});
+var lastLike=entries.length?entries[entries.length-1].like:null;
+var firstLike=entries.length?entries[0].like:null;
+var diff=lastLike!==null&&firstLike!==null?lastLike-firstLike:null;
+var diffStr=diff===null?’’:diff>0?‘▲’+diff:diff<0?‘▼’+Math.abs(diff):‘→変化なし’;
+var diffColor=diff>0?‘var(–rose)’:diff<0?‘var(–muted)’:‘var(–text)’;
+html+=’<div class="person-stat">’
++’<div class="ps-header">’
++’<span class="ps-name">’+p.emoji+’ ‘+p.name+’</span>’
++’<span style="font-size:.75rem;color:'+diffColor+'">’+diffStr+’</span>’
++’</div>’
++’<div class="ps-days">好きになってから ‘+getDays(p.since)+’ 日間’+(p.met?’ ／ 出会った日: ‘+fmtDate(p.met):’’)+’</div>’
++(lastLike!==null?’<div class="like-bar"><div class="like-fill" style="width:'+lastLike+'%"></div></div><div style="font-size:.7rem;color:var(--muted)">最新の好き度: ‘+lastLike+’/100 ／ 記録 ‘+entries.length+‘件</div>’:’<div style="font-size:.7rem;color:var(--muted);margin-top:6px">まだ記録がありません</div>’)
++’</div>’;
+});
+el.innerHTML=html;
+}
+
+// ── CONFIRM ────────────────────────────────────────────────────
+function showConf(title,msg,btns){
+document.getElementById(‘conf-title’).textContent=title;
+document.getElementById(‘conf-msg’).textContent=msg;
+document.getElementById(‘conf-btns’).innerHTML=btns.map(function(b){
+return ‘<button class="btn '+b.cls+'" id="cb-'+b.label+'">’+b.label+’</button>’;
+}).join(’’);
+btns.forEach(function(b){
+document.getElementById(‘cb-’+b.label).addEventListener(‘click’,b.fn);
+});
+document.getElementById(‘conf-overlay’).style.display=‘flex’;
+}
+function closeConf(e){
+if(e&&e.target!==document.getElementById(‘conf-overlay’))return;
+document.getElementById(‘conf-overlay’).style.display=‘none’;
+}
+
+// ── HELPERS ────────────────────────────────────────────────────
+function today(){return new Date().toISOString().split(‘T’)[0];}
+function pad(n){return n<10?‘0’+n:n;}
+function getDays(since){return Math.max(0,Math.floor((new Date()-new Date(since))/86400000));}
+function fmtDate(d){
+if(!d)return’’;
+var p=d.split(’-’);
+return p[0]+‘年’+parseInt(p[1])+‘月’+parseInt(p[2])+‘日’;
+}
+
+// ── INIT ───────────────────────────────────────────────────────
+renderHome();
+</script>
+
+</body>
+</html>
