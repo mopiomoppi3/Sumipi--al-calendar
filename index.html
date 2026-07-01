@@ -65,7 +65,12 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .person-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blush),var(--rose));border-radius:18px 18px 0 0;}
 .person-card:hover{transform:translateY(-2px);box-shadow:0 7px 22px var(--shadow);}
 .person-card.selected-card{border-color:var(--rose);}
-.p-emoji{font-size:1.8rem;margin-bottom:6px;}
+.p-dot{width:28px;height:28px;border-radius:50%;margin-bottom:8px;}
+.color-row{display:flex;gap:8px;flex-wrap:wrap;}
+.color-opt{width:22px;height:22px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:transform .18s,border-color .18s;display:inline-block;}
+.color-opt:hover{transform:scale(1.18);}
+.color-opt.selected{border-color:#333;transform:scale(1.18);}
+.cal-mark{display:inline-block;width:13px;height:13px;border-radius:2px;margin-left:2px;vertical-align:middle;font-size:.55rem;color:white;text-align:center;line-height:13px;font-weight:700;}
 .p-name{font-weight:700;font-size:1rem;color:var(--deep);}
 .p-since{font-size:0.7rem;color:var(--muted);margin-top:3px;}
 .p-days{margin-top:8px;font-size:1.4rem;font-family:'Klee One',cursive;color:var(--rose);font-weight:600;}
@@ -201,9 +206,9 @@ textarea{resize:vertical;min-height:72px;}
 
 <!-- TABS -->
 <div class="tabs">
-  <button class="tab active" onclick="showTab('home',this)">💗 片思い中</button>
-  <button class="tab" onclick="showTab('cal',this)">📅 カレンダー</button>
-  <button class="tab" onclick="showTab('stats',this)">✨ 統計</button>
+  <button class="tab active" onclick="showTab('home',this)">片思い中</button>
+  <button class="tab" onclick="showTab('cal',this)">カレンダー</button>
+  <button class="tab" onclick="showTab('stats',this)">統計</button>
 </div>
 
 <div class="app">
@@ -295,42 +300,48 @@ function showTab(tab,el){
 }
 
 // ── HOME ──────────────────────────────────────────────────────
-var showAddForm=false, selEmoji='💗';
-var emojis=['💗','🌸','🌹','⭐','🦋','🌙','🌈','🍀','🎀','💫'];
+var showAddForm=false;
+var personColors=['#e8698a','#9b6fd4','#3daa88','#e88a50','#4a9fd4','#c0496d','#6e3fa8','#1f7a60','#c05e28','#1a72a8'];
+
+function getColor(p){ return p.color||personColors[0]; }
 
 function renderHome(){
   var grid=document.getElementById('persons-grid');
   var addArea=document.getElementById('add-area');
   if(!data.persons.length&&!showAddForm){
-    grid.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="ei">💌</div><p>まだ片思い中の人がいません<br>下のボタンから追加しよう！</p></div>';
+    grid.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="ei">—</div><p>まだ片思い中の人がいません<br>下のボタンから追加しよう！</p></div>';
   } else {
     grid.innerHTML=data.persons.map(function(p,i){
       var days=getDays(p.since);
       var entries=data.entries.filter(function(e){return e.personId===p.id;});
-      var lastLike=entries.length?entries.sort(function(a,b){return b.date.localeCompare(a.date);})[0].like:'-';
-      return '<div class="person-card">'
+      var sorted=entries.slice().sort(function(a,b){return b.date.localeCompare(a.date);});
+      var lastLike=sorted.length?sorted[0].like:null;
+      var c=getColor(p);
+      return '<div class="person-card" style="--card-color:'+c+'">'
         +'<button class="del-btn" onclick="delPerson('+i+',event)">✕</button>'
-        +'<div class="p-emoji">'+p.emoji+'</div>'
+        +'<div class="p-dot" style="background:'+c+'"></div>'
         +'<div class="p-name">'+p.name+'</div>'
         +'<div class="p-since">好きになった日: '+fmtDate(p.since)+'</div>'
-        +'<div class="p-days">'+days+'<span> 日間</span></div>'
-        +'<div class="p-like">最新の好き度: '+(lastLike==='-'?'-':lastLike+'/100')+'</div>'
+        +'<div class="p-days" style="color:'+c+'">'+days+'<span> 日間</span></div>'
+        +'<div class="p-like">最新の好き度: '+(lastLike!==null?lastLike+'/100':'—')+'</div>'
         +'</div>';
     }).join('');
   }
   if(showAddForm){
+    var usedCount=data.persons.length;
+    var colorPickHtml=personColors.map(function(c,ci){
+      return '<span class="color-opt'+(ci===0?' selected':'')+'" data-color="'+c+'" style="background:'+c+'" onclick="pickColor(this)"></span>';
+    }).join('');
     addArea.innerHTML='<div class="add-card">'
-      +'<h2>💕 新しい片思いを追加</h2>'
+      +'<h2>新しい片思いを追加</h2>'
       +'<div class="form-row">'
       +'<div class="form-group"><label>呼び名</label><input type="text" id="n-name" placeholder="例：Kくん、花ちゃん"></div>'
       +'<div class="form-group"><label>好きになった日</label><input type="date" id="n-since" value="'+today()+'"></div>'
       +'</div>'
       +'<div class="form-group" style="margin-bottom:12px"><label>出会った日（任意）</label><input type="date" id="n-met"></div>'
-      +'<div class="form-group" style="margin-bottom:12px"><label>アイコン</label><div class="emoji-row">'
-      +emojis.map(function(e){return '<span class="emoji-opt'+(e===selEmoji?' selected':'')+'" onclick="pickEmoji(\''+e+'\',this)">'+e+'</span>';}).join('')
-      +'</div></div>'
+      +'<div class="form-group" style="margin-bottom:14px"><label>カラー</label><div class="color-row">'+colorPickHtml+'</div></div>'
       +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
-      +'<button class="btn btn-primary" onclick="addPerson()">追加する 💌</button>'
+      +'<button class="btn btn-primary" onclick="addPerson()">追加する</button>'
       +'<button class="btn btn-secondary" onclick="showAddForm=false;renderHome()">キャンセル</button>'
       +'</div></div>';
   } else {
@@ -338,9 +349,10 @@ function renderHome(){
   }
 }
 
-function pickEmoji(e,el){
-  selEmoji=e;
-  document.querySelectorAll('.emoji-opt').forEach(x=>x.classList.remove('selected'));
+var selColor=personColors[0];
+function pickColor(el){
+  selColor=el.dataset.color;
+  document.querySelectorAll('.color-opt').forEach(function(x){x.classList.remove('selected');});
   el.classList.add('selected');
 }
 function addPerson(){
@@ -349,13 +361,13 @@ function addPerson(){
   var met=document.getElementById('n-met').value;
   if(!name){alert('呼び名を入力してね');return;}
   if(!since){alert('好きになった日を選んでね');return;}
-  data.persons.push({id:Date.now().toString(),name:name,since:since,met:met,emoji:selEmoji});
-  save(); showAddForm=false; selEmoji='💗'; renderHome();
+  data.persons.push({id:Date.now().toString(),name:name,since:since,met:met,color:selColor});
+  save(); showAddForm=false; selColor=personColors[0]; renderHome();
 }
 function delPerson(i,e){
   e.stopPropagation();
   var p=data.persons[i];
-  showConf(p.emoji+' '+p.name+' を削除しますか？','関連する記録も全て削除されます。',[
+  showConf(p.name+' を削除しますか？','関連する記録も全て削除されます。',[
     {label:'キャンセル',cls:'btn-secondary',fn:closeConf},
     {label:'削除する',cls:'btn-primary',fn:function(){
       data.entries=data.entries.filter(function(d){return d.personId!==p.id;});
@@ -372,14 +384,17 @@ function renderCal(){
   var tabsEl=document.getElementById('cal-person-tabs');
   if(!data.persons.length){
     tabsEl.innerHTML='';
-    document.getElementById('cal-grid-wrap').innerHTML='<div class="empty"><div class="ei">💌</div><p>先にホームで片思い中の人を追加してね</p></div>';
+    document.getElementById('cal-grid-wrap').innerHTML='<div class="empty"><div class="ei">—</div><p>先にホームで片思い中の人を追加してね</p></div>';
     document.getElementById('month-label').textContent='';
     return;
   }
   if(!calPersonId||!data.persons.find(function(p){return p.id===calPersonId;})) calPersonId=data.persons[0].id;
 
   tabsEl.innerHTML=data.persons.map(function(p){
-    return '<button class="cal-tab'+(p.id===calPersonId?' active':'')+'" onclick="selectCalPerson(\''+p.id+'\')">'+p.emoji+' '+p.name+'</button>';
+    var c=getColor(p);
+    return '<button class="cal-tab'+(p.id===calPersonId?' active':'')+'" style="'+(p.id===calPersonId?'background:'+c+';border-color:'+c+';':'')+'" onclick="selectCalPerson(\''+p.id+'\')">'
+      +'<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+(p.id===calPersonId?'white':c)+';margin-right:5px;vertical-align:middle;"></span>'
+      +p.name+'</button>';
   }).join('');
 
   renderCalGrid();
@@ -423,7 +438,7 @@ function renderCalGrid(){
 
     var cls='cal-cell'+(dow===0?' sun':dow===6?' sat':'')+(isToday?' today':'')+(hasEntry?' has-entry':'');
     html+='<div class="'+cls+'" onclick="openDay(\''+dateStr+'\')">';
-    html+='<div class="cal-date">'+d+(isMet?'<span style="color:var(--rose);margin-left:2px">💬</span>':isSince?'<span style="margin-left:2px">💗</span>':'')+'</div>';
+    html+='<div class="cal-date">'+d+(isMet?'<span class="cal-mark" style="background:var(--rose)">会</span>':isSince?'<span class="cal-mark" style="background:var(--blush)">好</span>':'')+'</div>';
     if(lastEntry){
       if(lastEntry.photo){
         html+='<img class="cal-thumb" src="'+lastEntry.photo+'" alt="">';
@@ -439,9 +454,9 @@ function renderCalGrid(){
   // legend
   if(person){
     html+='<div style="display:flex;gap:12px;font-size:.72rem;color:var(--muted);margin-top:4px;flex-wrap:wrap">';
-    if(person.since) html+='<span>💗 好きになった日</span>';
-    if(person.met) html+='<span>💬 出会った日</span>';
-    html+='<span>● 記録あり</span></div>';
+    if(person.since) html+='<span><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:var(--blush);margin-right:3px;vertical-align:middle;font-size:.6rem;color:white;text-align:center;line-height:12px;">好</span>好きになった日</span>';
+    if(person.met) html+='<span><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:var(--rose);margin-right:3px;vertical-align:middle;font-size:.6rem;color:white;text-align:center;line-height:12px;">会</span>出会った日</span>';
+    html+='<span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--rose);margin-right:3px;vertical-align:middle;"></span>記録あり</span></div>';
   }
   wrap.innerHTML=html;
 }
@@ -462,7 +477,7 @@ function openDay(dateStr){
   var entries=data.entries.filter(function(e){return e.personId===dmPersonId&&e.date===dmDate;});
   var d=new Date(dateStr); var wd=['日','月','火','水','木','金','土'][d.getDay()];
   document.getElementById('dm-title').textContent=fmtDate(dateStr)+'（'+wd+'）';
-  document.getElementById('dm-person').textContent=person?person.emoji+' '+person.name:'';
+  document.getElementById('dm-person').textContent=person?person.name:'';
 
   // existing entries
   var exHtml='';
@@ -472,7 +487,7 @@ function openDay(dateStr){
       exHtml+='<div class="existing-entry">'
         +'<div class="e-top"><span class="e-mood">'+(en.mood||'')+'</span>'
         +'<span class="e-like">'+(en.like?'好き度 '+en.like+'/100':'')+'</span>'
-        +'<button class="e-del" onclick="delEntry(\''+en.id+'\')">🗑</button></div>'
+        +'<button class="e-del" onclick="delEntry(\''+en.id+'\')">削除</button></div>'
         +(en.text?'<div class="e-text">'+en.text+'</div>':'')
         +(en.photo?'<img class="e-img" src="'+en.photo+'">':'')
         +'</div>';
@@ -485,21 +500,21 @@ function openDay(dateStr){
   var fHtml='<div class="entry-section"><h3>この日に記録を追加</h3>'
     +'<label style="font-size:.72rem;color:var(--muted);font-weight:500;">気分</label>'
     +'<div class="mood-row" style="margin-bottom:10px">'
-    +'<button class="mood-btn" onclick="dmSelectMood(this,\'🥰\')">🥰 ときめき</button>'
-    +'<button class="mood-btn" onclick="dmSelectMood(this,\'😊\')">😊 普通</button>'
-    +'<button class="mood-btn" onclick="dmSelectMood(this,\'💭\')">💭 切ない</button>'
-    +'<button class="mood-btn" onclick="dmSelectMood(this,\'😔\')">😔 つらい</button>'
+    +'<button class="mood-btn" onclick="dmSelectMood(this,\'ときめき\')">ときめき</button>'
+    +'<button class="mood-btn" onclick="dmSelectMood(this,\'普通\')">普通</button>'
+    +'<button class="mood-btn" onclick="dmSelectMood(this,\'切ない\')">切ない</button>'
+    +'<button class="mood-btn" onclick="dmSelectMood(this,\'つらい\')">つらい</button>'
     +'</div>'
     +'<label style="font-size:.72rem;color:var(--muted);font-weight:500;">好き度</label>'
-    +'<div class="like-row"><span>💔</span><input type="range" id="dm-like" min="1" max="100" value="70" oninput="document.getElementById(\'dm-like-val\').textContent=this.value"><span>💖</span><span class="like-val" id="dm-like-val">70</span></div>'
+    +'<div class="like-row"><span style="font-size:.75rem;color:var(--muted)">低</span><input type="range" id="dm-like" min="1" max="100" value="70" oninput="document.getElementById(\'dm-like-val\').textContent=this.value"><span style="font-size:.75rem;color:var(--muted)">高</span><span class="like-val" id="dm-like-val">70</span></div>'
     +'<label style="font-size:.72rem;color:var(--muted);font-weight:500;display:block;margin-bottom:4px;margin-top:8px;">日記</label>'
     +'<textarea id="dm-text" placeholder="今日あったこと…" style="margin-bottom:10px;"></textarea>'
     +'<label style="font-size:.72rem;color:var(--muted);font-weight:500;display:block;margin-bottom:6px;">写真</label>'
-    +'<div class="photo-upload"><label for="dm-photo-input">📷 写真を選ぶ</label><input type="file" id="dm-photo-input" accept="image/*" onchange="handlePhoto(this)"></div>'
+    +'<div class="photo-upload"><label for="dm-photo-input">写真を選ぶ</label><input type="file" id="dm-photo-input" accept="image/*" onchange="handlePhoto(this)"></div>'
     +'<img id="dm-photo-preview" style="display:none;width:100%;border-radius:10px;margin-top:8px;max-height:160px;object-fit:cover;">'
     +'</div>';
   document.getElementById('dm-form').innerHTML=fHtml;
-  document.getElementById('dm-btns').innerHTML='<button class="btn btn-secondary" onclick="closeDayModal()">閉じる</button><button class="btn btn-primary" onclick="saveEntry()">保存する 💌</button>';
+  document.getElementById('dm-btns').innerHTML='<button class="btn btn-secondary" onclick="closeDayModal()">閉じる</button><button class="btn btn-primary" onclick="saveEntry()">保存する</button>';
   document.getElementById('day-overlay').style.display='flex';
 }
 
@@ -546,7 +561,7 @@ function closeDayModal(e){
 function renderStats(){
   var el=document.getElementById('stats-content');
   if(!data.persons.length){
-    el.innerHTML='<div class="empty"><div class="ei">✨</div><p>片思い中の人を追加すると統計が見られます</p></div>';
+    el.innerHTML='<div class="empty"><div class="ei">—</div><p>片思い中の人を追加すると統計が見られます</p></div>';
     return;
   }
   var totalDays=data.persons.reduce(function(s,p){return s+getDays(p.since);},0);
@@ -565,7 +580,7 @@ function renderStats(){
     var diffColor=diff>0?'var(--rose)':diff<0?'var(--muted)':'var(--text)';
     html+='<div class="person-stat">'
       +'<div class="ps-header">'
-      +'<span class="ps-name">'+p.emoji+' '+p.name+'</span>'
+      +'<span class="ps-name">'+p.name+'</span>'
       +'<span style="font-size:.75rem;color:'+diffColor+'">'+diffStr+'</span>'
       +'</div>'
       +'<div class="ps-days">好きになってから '+getDays(p.since)+' 日間'+(p.met?' ／ 出会った日: '+fmtDate(p.met):'')+'</div>'
