@@ -207,12 +207,12 @@ body::before{
   color:#fff;
 }
 .tab-indicator{
-  position:absolute; z-index:0; top:var(--tab-inset); left:var(--tab-inset);
+  position:absolute; z-index:0; top:var(--tab-inset); left:0;
   height:var(--tab-pill-height); width:0; border-radius:calc(var(--tab-pill-height) / 2);
   background:var(--rose);
   box-shadow:0 4px 16px rgba(232,105,138,0.35), 0 1px 0 rgba(255,255,255,.22) inset;
   pointer-events:none;
-  will-change:left,width,transform;
+  will-change:left,width;
 }
 [data-theme=lavender] .tab-indicator{box-shadow:0 4px 16px rgba(155,111,212,0.35),0 1px 0 rgba(255,255,255,.22) inset;}
 [data-theme=mint]     .tab-indicator{box-shadow:0 4px 16px rgba(61,170,136,0.35),0 1px 0 rgba(255,255,255,.22) inset;}
@@ -251,7 +251,7 @@ body::before{
   .tab-bar{
     left:8px;
     right:8px;
-    bottom:8px;
+    bottom:calc(8px + env(safe-area-inset-bottom, 0px));
     width:auto;
     max-width:none;
     transform:none;
@@ -260,6 +260,7 @@ body::before{
     flex:1 1 0;
     min-width:0;
   }
+  .app{padding-bottom:calc(88px + env(safe-area-inset-bottom, 0px));}
 }
 
 
@@ -714,10 +715,11 @@ function moveTabIndicator(el,instant){
   var opticalOffset=el===firstTab?parseFloat(getComputedStyle(bar).getPropertyValue('--tab-left-optical-adjustment'))||0:0;
   var target={left:(tabRect.left-barRect.left-opticalOffset)+'px',width:tabRect.width+'px'};
 
-  // Read the presentation value before cancelling: rapid taps continue from
-  // exactly where the pill is visible, rather than jumping to its old target.
+  // Keep the capsule's circular ends intact while it changes size. This is a
+  // tiny isolated element, so animating its two geometry values stays smooth
+  // while avoiding the oval distortion created by scaleX.
   var current=getComputedStyle(indicator);
-  var from={left:current.left,width:current.width,transform:current.transform};
+  var from={left:current.left,width:current.width};
   if(tabIndicatorAnimation)tabIndicatorAnimation.cancel();
 
   if(instant||window.matchMedia('(prefers-reduced-motion: reduce)').matches){
@@ -728,8 +730,9 @@ function moveTabIndicator(el,instant){
   indicator.style.left=target.left;
   indicator.style.width=target.width;
   tabIndicatorAnimation=indicator.animate(
-    [from,{left:target.left,width:target.width,transform:'translateX(0) scaleX(1)'}],
-    {duration:360,easing:'cubic-bezier(.22, 1.18, .36, 1)',fill:'both'}
+    [from,{left:target.left,width:target.width}],
+    // A small overshoot gives the selected tab a soft, physical landing.
+    {duration:340,easing:'cubic-bezier(.22, 1.16, .36, 1)',fill:'both'}
   );
   tabIndicatorAnimation.onfinish=function(){tabIndicatorAnimation=null;};
 }
@@ -745,9 +748,13 @@ function showTab(tab,el){
   el.classList.add('active');
   el.setAttribute('aria-selected','true');
   moveTabIndicator(el);
-  if(tab==='home') renderHome();
-  if(tab==='cal')  {calPersonId=data.persons.length?data.persons[0].id:null; renderCal();}
-  if(tab==='stats') renderStats();
+  // Let the first navigation frame reach the display before rendering a tab.
+  requestAnimationFrame(function(){
+    if(!el.classList.contains('active'))return;
+    if(tab==='home') renderHome();
+    if(tab==='cal')  {calPersonId=data.persons.length?data.persons[0].id:null; renderCal();}
+    if(tab==='stats') renderStats();
+  });
 }
 
 // ── HOME ─────────────────────────────────────────────────────
