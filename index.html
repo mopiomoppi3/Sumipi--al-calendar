@@ -522,6 +522,27 @@ textarea{resize:vertical;min-height:70px;}
 .conf-modal h2{font-size:1rem;color:var(--text);margin-bottom:6px;font-weight:600;}
 .conf-modal p{font-size:.8rem;color:var(--muted);margin-bottom:18px;line-height:1.6;}
 
+/* ── v4: blur fix, white theme, header, popover ─────────────── */
+[data-theme=white]{--rose:#1c1c1e;--deep:#000;--blush:#d1d1d6;--petal:#f2f2f7;--cream:#fff;--card:#fffffff0;--text:#1c1c1e;--sub:#5c5c60;--muted:#8e8e93;--border:rgba(0,0,0,.08);--shadow-sm:0 1px 3px rgba(0,0,0,.05),0 4px 14px rgba(0,0,0,.06);--shadow-md:0 4px 12px rgba(0,0,0,.07),0 16px 40px rgba(0,0,0,.09);--shadow-lg:0 8px 24px rgba(0,0,0,.09),0 32px 64px rgba(0,0,0,.12);--g1:rgba(0,0,0,.03);--g2:rgba(0,0,0,.02);--g3:rgba(0,0,0,.015);}
+[data-theme=white] .tab-pill{box-shadow:0 4px 14px rgba(0,0,0,.22);}
+/* 背景を半透明にして、下のコンテンツが本当にぼけて透けるように */
+.header.header,.tab-bar.tab-bar{background:color-mix(in srgb,var(--cream) 50%,transparent);backdrop-filter:blur(30px) saturate(190%);-webkit-backdrop-filter:blur(30px) saturate(190%);}
+.hdr-actions{display:flex;gap:8px;align-items:center;}
+.hdr-btn{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.75);background:color-mix(in srgb,var(--cream) 70%,transparent);color:var(--rose);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 1px 6px var(--border);transition:transform .15s var(--spring);}
+.hdr-btn:active{transform:scale(.86);}
+.hdr-btn svg{width:17px;height:17px;}
+.theme-panel{top:42px;min-width:240px;padding:14px;}
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 6px;}
+.chip{border:none;background:none;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;font-family:inherit;font-size:.64rem;color:var(--sub);transition:transform .15s var(--spring);}
+.chip:active{transform:scale(.9);}
+.chip i{width:34px;height:34px;border-radius:50%;display:block;border:3px solid transparent;box-shadow:0 0 0 1px var(--border) inset;transition:transform .25s var(--spring),border-color .15s;}
+.chip.active i{border-color:var(--text);transform:scale(1.06);}
+.chip.active{color:var(--text);font-weight:600;}
+.c-white{background:#fff;}
+@media (hover:none){.del-btn{opacity:.55;}}
+.today-btn{margin-left:auto;padding:5px 13px;border-radius:999px;border:1.5px solid var(--blush);background:color-mix(in srgb,var(--cream) 70%,transparent);color:var(--rose);font:600 .72rem 'Zen Maru Gothic',sans-serif;cursor:pointer;transition:transform .14s var(--spring);}
+.today-btn:active{transform:scale(.92);}
+
 /* ── REDUCED MOTION ──────────────────────────────────────────── */
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:opacity .2s ease!important;transform:none!important;}
@@ -533,18 +554,13 @@ textarea{resize:vertical;min-height:70px;}
 
 <div class="header">
   <h1>片思いカレンダー</h1>
-  <div class="theme-wrap">
-    <button class="theme-btn" onclick="toggleThemePanel()" aria-label="カラーテーマ">
-      <svg viewBox="0 0 24 24" fill="white"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
-    </button>
-    <div class="theme-panel" id="theme-panel">
-      <div class="theme-panel-label">カラーテーマ</div>
-      <div class="swatches">
-        <button class="swatch sw-pink active"    title="ピンク"     onclick="setTheme('pink',this)"></button>
-        <button class="swatch sw-lavender"       title="ラベンダー" onclick="setTheme('lavender',this)"></button>
-        <button class="swatch sw-mint"           title="ミント"     onclick="setTheme('mint',this)"></button>
-        <button class="swatch sw-peach"          title="ピーチ"     onclick="setTheme('peach',this)"></button>
-        <button class="swatch sw-sky"            title="スカイ"     onclick="setTheme('sky',this)"></button>
+  <div class="hdr-actions">
+    <button class="hdr-btn" onclick="openBackup()" aria-label="バックアップ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 20h14"/></svg></button>
+    <div class="theme-wrap">
+      <button class="hdr-btn" onclick="toggleThemePanel()" aria-label="カラーテーマ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.5-1.9-.3-1 .4-2.1 1.5-2.1h2a4 4 0 0 0 4-4c0-5-4-10-9-10z"/><circle cx="7.5" cy="11" r="1" fill="currentColor"/><circle cx="10.5" cy="7" r="1" fill="currentColor"/><circle cx="15" cy="7.5" r="1" fill="currentColor"/></svg></button>
+      <div class="theme-panel" id="theme-panel">
+        <div class="theme-panel-label">カラーテーマ</div>
+        <div class="chips"><button class="chip active" data-t="pink" onclick="setTheme('pink')"><i class="sw-pink"></i>ピンク</button><button class="chip" data-t="lavender" onclick="setTheme('lavender')"><i class="sw-lavender"></i>ラベンダー</button><button class="chip" data-t="mint" onclick="setTheme('mint')"><i class="sw-mint"></i>ミント</button><button class="chip" data-t="peach" onclick="setTheme('peach')"><i class="sw-peach"></i>ピーチ</button><button class="chip" data-t="sky" onclick="setTheme('sky')"><i class="sw-sky"></i>スカイ</button><button class="chip" data-t="white" onclick="setTheme('white')"><i class="c-white"></i>ホワイト</button></div>
       </div>
     </div>
   </div>
@@ -589,6 +605,7 @@ textarea{resize:vertical;min-height:70px;}
       <button class="nav-btn" onclick="changeMonth(-1)" aria-label="前月">‹</button>
       <div class="month-label" id="month-label"></div>
       <button class="nav-btn" onclick="changeMonth(1)" aria-label="次月">›</button>
+      <button class="today-btn" onclick="goToday()">今日</button>
     </div>
     <div id="cal-grid-wrap"></div>
   </div>
@@ -610,6 +627,9 @@ textarea{resize:vertical;min-height:70px;}
     <div class="modal-btns" id="dm-btns"></div>
   </div>
 </div>
+
+<!-- BACKUP -->
+<div id="bk-overlay" class="overlay" style="display:none"><div class="day-modal"><div class="sheet-handle"></div><div class="dm-head"><h2>バックアップ</h2></div><div id="bk-body"></div><div class="modal-btns"><button class="btn btn-secondary" onclick="closeBk()">閉じる</button></div></div></div>
 
 <!-- CONFIRM -->
 <div id="conf-overlay" class="overlay center" style="display:none">
@@ -693,7 +713,7 @@ function renderHome(){
       var sorted=data.entries.filter(e=>e.personId===p.id).sort((a,b)=>b.date.localeCompare(a.date));
       var lastLike=sorted.length?sorted[0].like:null;
       var c=getColor(p);
-      return '<div class="person-card" onpointerenter="this.classList.add(\'lifted\')" onpointerleave="this.classList.remove(\'lifted\')">'
+      return '<div class="person-card" onclick="goCal(\''+p.id+'\')" onpointerenter="this.classList.add(\'lifted\')" onpointerleave="this.classList.remove(\'lifted\')">'
         +'<button class="del-btn" onclick="delPerson('+i+',event)" aria-label="削除">✕</button>'
         +'<div class="p-dot" style="background:'+c+'"></div>'
         +'<div class="p-name">'+esc(p.name)+'</div>'
@@ -990,6 +1010,105 @@ function fmtDate(d){if(!d)return'';var p=d.split('-');return p[0]+'年'+parseInt
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 // ── INIT ──────────────────────────────────────────────────────
+// ── v4 ──────────────────────────────────────────────────────
+function setTheme(t){
+  document.body.setAttribute('data-theme',t==='pink'?'':t);
+  document.querySelectorAll('.chip').forEach(function(c){c.classList.toggle('active',c.dataset.t===t);});
+  localStorage.setItem('cc-theme',t);
+}
+setTheme(localStorage.getItem('cc-theme')||'pink');
+
+function save(){
+  try{localStorage.setItem(DB,JSON.stringify(data));}
+  catch(e){alert('保存容量がいっぱいです。バックアップを書き出してから、写真を減らしてください。');}
+}
+function closeConf(e){
+  var ov=document.getElementById('conf-overlay');
+  if(e&&e.target&&e.target!==ov&&!e.target.classList.contains('btn'))return;
+  ov.style.display='none';
+}
+function goCal(id){showTab('cal',document.getElementById('ti-cal'));calPersonId=id;renderCal();}
+function goToday(){
+  if(!data.persons.length)return;
+  calYear=new Date().getFullYear();calMonth=new Date().getMonth();renderCalGrid();
+}
+function handlePhoto(input){
+  var f=input.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(e){
+    var im=new Image();
+    im.onload=function(){
+      var s=Math.min(1,900/Math.max(im.width,im.height));
+      var c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);
+      c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+      dmPhotoB64=c.toDataURL('image/jpeg',.82);
+      var p=document.getElementById('dm-prev');p.src=dmPhotoB64;p.style.display='block';
+    };
+    im.src=e.target.result;
+  };
+  r.readAsDataURL(f);
+}
+function closeSheet(id){
+  var ov=document.getElementById(id),m=ov.firstElementChild;
+  m.style.animation='none';
+  m.style.transition='transform .28s cubic-bezier(.4,0,1,1),opacity .22s ease';
+  m.style.transform='translateY(100%)';m.style.opacity='.4';
+  setTimeout(function(){ov.style.display='none';m.style.transition='';m.style.transform='';m.style.opacity='';m.style.animation='';},280);
+}
+function closeDayModal(){closeSheet('day-overlay');}
+function closeBk(){closeSheet('bk-overlay');}
+
+// ── backup ──
+function openBackup(){
+  var photos=data.entries.filter(function(e){return e.photo;}).length;
+  var last=localStorage.getItem('cc-lastbackup');
+  var kb=Math.round(JSON.stringify(data).length/1024);
+  document.getElementById('bk-body').innerHTML=
+    '<div class="esec"><div class="esec-title">現在のデータ</div><div class="exist-card" style="line-height:1.9;font-size:.82rem">片思い '+data.persons.length+'人 ／ 記録 '+data.entries.length+'件 ／ 写真 '+photos+'枚<br><span style="color:var(--muted)">サイズ 約'+kb+'KB ／ '+(last?'最後の書き出し '+fmtDate(last.slice(0,10)):'まだ書き出していません')+'</span></div></div>'
+    +'<p style="font-size:.76rem;color:var(--muted);line-height:1.7;margin-bottom:14px">データはこの端末のブラウザ内にだけ保存されています。機種変更やブラウザのデータ削除に備えて、ときどき書き出しておくと安心です。</p>'
+    +'<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" onclick="exportData()">書き出す</button><label class="btn btn-secondary" style="cursor:pointer">読み込む<input type="file" accept="application/json,.json" style="display:none" onchange="importData(this)"></label></div>';
+  var ov=document.getElementById('bk-overlay');ov.style.display='flex';
+  ov.onclick=function(e){if(e.target===ov)closeBk();};
+}
+function exportData(){
+  var obj={app:'crush-calendar',version:1,exportedAt:new Date().toISOString(),theme:localStorage.getItem('cc-theme')||'pink',persons:data.persons,entries:data.entries};
+  var name='kataomoi-backup-'+today()+'.json';
+  var blob=new Blob([JSON.stringify(obj)],{type:'application/json'});
+  function done(){localStorage.setItem('cc-lastbackup',new Date().toISOString());openBackup();}
+  var file=null;try{file=new File([blob],name,{type:'application/json'});}catch(x){}
+  if(file&&navigator.canShare&&navigator.canShare({files:[file]})){
+    navigator.share({files:[file],title:'片思いカレンダー バックアップ'}).then(done).catch(function(){});
+  }else{
+    var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(function(){URL.revokeObjectURL(a.href);},1500);done();
+  }
+}
+function importData(input){
+  var f=input.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(e){
+    var o;try{o=JSON.parse(e.target.result);}catch(x){alert('ファイルを読み込めませんでした');return;}
+    if(!o||!Array.isArray(o.persons)||!Array.isArray(o.entries)){alert('片思いカレンダーのバックアップではありません');return;}
+    showConf('バックアップを読み込みますか？','ファイル内：片思い'+o.persons.length+'人 / 記録'+o.entries.length+'件。「統合」は今のデータに足し、「置き換え」は今のデータを消してファイルの内容にします。',[
+      {label:'キャンセル',cls:'btn-secondary',fn:closeConf},
+      {label:'統合',cls:'btn-secondary',fn:function(){mergeIn(o,false);}},
+      {label:'置き換え',cls:'btn-primary',fn:function(){mergeIn(o,true);}}
+    ]);
+  };
+  r.readAsText(f);input.value='';
+}
+function mergeIn(o,replace){
+  if(replace){data={persons:o.persons,entries:o.entries};}
+  else{
+    var pid={},eid={};
+    data.persons.forEach(function(p){pid[p.id]=1;});data.entries.forEach(function(x){eid[x.id]=1;});
+    o.persons.forEach(function(p){if(!pid[p.id])data.persons.push(p);});
+    o.entries.forEach(function(x){if(!eid[x.id])data.entries.push(x);});
+  }
+  save();closeConf();closeBk();renderHome();
+}
+
 renderHome();
 </script>
 </body>
