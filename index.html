@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>片思いカレンダー</title>
+<meta name="theme-color" content="#fff5f8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="片思い">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20512%20512%22%20width=%22512%22%20height=%22512%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id=%22bg%22%20x1=%220%22%20y1=%220%22%20x2=%221%22%20y2=%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset=%220%22%20stop-color=%22%23f7b3ca%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset=%221%22%20stop-color=%22%23e8698a%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%20%20%3Cfilter%20id=%22shadow%22%20x=%22-30%25%22%20y=%22-30%25%22%20width=%22160%25%22%20height=%22170%25%22%3E%0A%20%20%20%20%20%20%3CfeDropShadow%20dx=%220%22%20dy=%2212%22%20stdDeviation=%2214%22%20flood-color=%22%238c1f48%22%20flood-opacity=%220.28%22/%3E%0A%20%20%20%20%3C/filter%3E%0A%20%20%3C/defs%3E%0A%20%20%3C!--%20layer%201:%20background%20--%3E%0A%20%20%3Cg%20id=%22layer-background%22%3E%3Crect%20width=%22512%22%20height=%22512%22%20fill=%22url(%23bg)%22/%3E%3C/g%3E%0A%20%20%3C!--%20layer%202:%20heart%20--%3E%0A%20%20%3Cg%20id=%22layer-heart%22%20filter=%22url(%23shadow)%22%3E%0A%20%20%20%20%3Cpath%20d=%22M256%20400%20C%20160%20330,%20108%20274,%20108%20212%20C%20108%20168,%20142%20136,%20184%20136%20C%20214%20136,%20240%20152,%20256%20178%20C%20272%20152,%20298%20136,%20328%20136%20C%20370%20136,%20404%20168,%20404%20212%20C%20404%20274,%20352%20330,%20256%20400%20Z%22%20fill=%22%23ffffff%22/%3E%0A%20%20%3C/g%3E%0A%3C/svg%3E%0A">
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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">
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
 <style>
 /* ── TOKENS ─────────────────────────────────────────────────── */
@@ -128,54 +135,37 @@ body::before{
 }
 @keyframes panelIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
 .theme-panel-label{font-size:.68rem;color:var(--muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
-.swatches{display:flex;gap:8px;align-items:center;}
+.swatches{display:flex;gap:7px;align-items:center;}
 .swatch{
   width:20px;height:20px;border-radius:50%;
-  border:0; padding:0; cursor:pointer; outline:none;
-  appearance:none; -webkit-appearance:none;
-  background:transparent; position:relative; flex:0 0 20px;
-  transition:transform .18s var(--spring);
-  will-change:transform; overflow:visible;
-}
-.swatch::before{
-  content:''; position:absolute; inset:0; border-radius:50%;
-  background:var(--swatch-fill); box-shadow:0 1px 3px rgba(45,18,32,.16);
-}
-.swatch::after{
-  content:''; position:absolute; inset:-3px; border:2px solid transparent;
-  border-radius:50%; transition:border-color .15s;
+  border:2.5px solid transparent; cursor:pointer; outline:none;
+  transition:transform .18s var(--spring),border-color .15s;
+  will-change:transform;
 }
 .swatch:active{transform:scale(.85)!important;}
-.swatch.active{transform:scale(1.12);}
-.swatch.active::after{border-color:var(--text);}
-.sw-pink    {--swatch-fill:linear-gradient(135deg,#f2a7c3,#e8698a);}
-.sw-lavender{--swatch-fill:linear-gradient(135deg,#c9aaee,#9b6fd4);}
-.sw-mint    {--swatch-fill:linear-gradient(135deg,#8ed8c0,#3daa88);}
-.sw-peach   {--swatch-fill:linear-gradient(135deg,#f5c89a,#e88a50);}
-.sw-sky     {--swatch-fill:linear-gradient(135deg,#99cff5,#4a9fd4);}
+.swatch.active{border-color:var(--text);transform:scale(1.22);}
+.sw-pink    {background:linear-gradient(135deg,#f2a7c3,#e8698a);}
+.sw-lavender{background:linear-gradient(135deg,#c9aaee,#9b6fd4);}
+.sw-mint    {background:linear-gradient(135deg,#8ed8c0,#3daa88);}
+.sw-peach   {background:linear-gradient(135deg,#f5c89a,#e88a50);}
+.sw-sky     {background:linear-gradient(135deg,#99cff5,#4a9fd4);}
 
 /* ── BOTTOM TAB BAR — pill style ─────────────────────────────── */
 .tab-bar{
   position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
   z-index:100;
-  display:inline-flex; align-items:center; justify-content:center;
-  /* 56px / 40px pills share one centre; every visible edge gap is 8px. */
-  --tab-pill-height:40px;
-  --tab-edge-gap:8px;
-  --tab-inset:var(--tab-edge-gap);
-  --tab-left-optical-adjustment:2px;
-  height:calc(var(--tab-pill-height) + (var(--tab-edge-gap) * 2));
-  padding:0 var(--tab-inset);
+  display:flex; align-items:center; justify-content:center;
+  height:64px;
+  padding:0 8px;
   gap:4px;
   background:rgba(255,245,248,0.82);
   backdrop-filter:blur(28px) saturate(200%);
   -webkit-backdrop-filter:blur(28px) saturate(200%);
   border-radius:999px;
-  border:0;
-  box-shadow:0 4px 24px rgba(192,73,109,0.14), 0 1px 0 rgba(255,255,255,0.5) inset, 0 0 0 1px rgba(255,255,255,0.7) inset;
+  border:1px solid rgba(255,255,255,0.7);
+  box-shadow:0 4px 24px rgba(192,73,109,0.14), 0 1px 0 rgba(255,255,255,0.5) inset;
   /* don't stretch full width */
-  width:auto; max-width:calc(100vw - 40px);
-  isolation:isolate;
+  width:340px; max-width:calc(100vw - 40px);
 }
 [data-theme=lavender] .tab-bar{background:rgba(248,244,255,0.82);}
 [data-theme=mint]     .tab-bar{background:rgba(242,252,249,0.82);}
@@ -183,16 +173,16 @@ body::before{
 [data-theme=sky]      .tab-bar{background:rgba(242,248,255,0.82);}
 
 .tab-item{
-  position:relative; z-index:1;
-  display:flex; align-items:center; justify-content:center;
-  gap:6px; border:none; cursor:pointer;
-  font-family:'Zen Maru Gothic',sans-serif; font-size:.78rem; font-weight:600;
+  flex:1; min-width:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:2px; border:none; cursor:pointer;
+  font-family:'Zen Maru Gothic',sans-serif; font-size:.62rem; font-weight:600; letter-spacing:.02em;
   color:var(--muted); background:transparent;
-  height:var(--tab-pill-height); border-radius:999px;
-  padding:0 16px;
+  height:52px; border-radius:999px;
+  padding:0 4px;
   white-space:nowrap;
   -webkit-tap-highlight-color:transparent;
-  transition:color .18s var(--ease-out), transform .14s var(--spring);
+  transition:color .18s var(--ease-out), background .18s var(--ease-out), box-shadow .18s var(--ease-out), transform .14s var(--spring);
   will-change:transform;
 }
 .tab-item svg{
@@ -203,69 +193,33 @@ body::before{
 .tab-label{
   /* always visible */
 }
-.tab-item.active{
-  color:#fff;
-}
-.tab-indicator{
-  position:absolute; z-index:0; top:var(--tab-inset); left:0;
-  height:var(--tab-pill-height); width:0; border-radius:calc(var(--tab-pill-height) / 2);
-  background:var(--rose);
-  box-shadow:0 4px 16px rgba(232,105,138,0.35), 0 1px 0 rgba(255,255,255,.22) inset;
-  pointer-events:none;
+.tab-item{position:relative;z-index:1;}
+.tab-item.active{color:#fff;}
+/* sliding pill */
+.tab-pill{
+  position:absolute; top:5px; left:0; height:52px; width:0;
+  border-radius:999px; background:var(--rose);
+  box-shadow:0 4px 16px rgba(232,105,138,0.35);
+  pointer-events:none; z-index:0;
+  /* 出だしが速く、終わりでキュッと止まる。反動は小さく短く */
+  transition:
+    left  .32s cubic-bezier(0.14,1.25,0.3,1.0),
+    width .40s cubic-bezier(0.16,1.15,0.3,1.0),
+    background .3s;
   will-change:left,width;
 }
-[data-theme=lavender] .tab-indicator{box-shadow:0 4px 16px rgba(155,111,212,0.35),0 1px 0 rgba(255,255,255,.22) inset;}
-[data-theme=mint]     .tab-indicator{box-shadow:0 4px 16px rgba(61,170,136,0.35),0 1px 0 rgba(255,255,255,.22) inset;}
-[data-theme=peach]    .tab-indicator{box-shadow:0 4px 16px rgba(232,138,80,0.35),0 1px 0 rgba(255,255,255,.22) inset;}
-[data-theme=sky]      .tab-indicator{box-shadow:0 4px 16px rgba(74,159,212,0.35),0 1px 0 rgba(255,255,255,.22) inset;}
+.tab-pill.no-anim{transition:none;}
+[data-theme=lavender] .tab-pill{box-shadow:0 4px 16px rgba(155,111,212,0.35);}
+[data-theme=mint]     .tab-pill{box-shadow:0 4px 16px rgba(61,170,136,0.35);}
+[data-theme=peach]    .tab-pill{box-shadow:0 4px 16px rgba(232,138,80,0.35);}
+[data-theme=sky]      .tab-pill{box-shadow:0 4px 16px rgba(74,159,212,0.35);}
 .tab-item.active svg{transform:scale(1.06);}
 .tab-item:active{transform:scale(.91);}
 .tab-item:not(.active):active svg{transform:scale(.84);}
 
-/* Compact, full-width navigation on phone-sized viewports. */
-@media(max-width:430px){
-  .tab-bar{
-    --tab-pill-height:38px;
-    --tab-edge-gap:7px;
-    /* Deliberately edge-to-edge on phones for the compact navigation layout. */
-    left:0;
-    right:0;
-    bottom:8px;
-    width:auto; max-width:none; transform:none; gap:0;
-  }
-  .tab-item{
-    flex:1 1 0; min-width:0; height:var(--tab-pill-height);
-    gap:4px; padding:0 clamp(5px,2.4vw,10px); font-size:.72rem;
-  }
-  .tab-item svg{width:18px;height:18px;}
-  .app{padding-bottom:calc(80px + env(safe-area-inset-bottom,0px));}
-}
-@media(max-width:350px){
-  .tab-bar{--tab-edge-gap:6px;}
-  .tab-item{gap:3px;padding:0 4px;font-size:.68rem;}
-  .tab-item svg{width:17px;height:17px;}
-}
-
-/* Portrait takes priority over device width: always span the full screen. */
-@media(orientation:portrait){
-  .tab-bar{
-    left:8px;
-    right:8px;
-    bottom:calc(8px + env(safe-area-inset-bottom, 0px));
-    width:auto;
-    max-width:none;
-    transform:none;
-  }
-  .tab-item{
-    flex:1 1 0;
-    min-width:0;
-  }
-  .app{padding-bottom:calc(88px + env(safe-area-inset-bottom, 0px));}
-}
-
 
 /* ── LAYOUT ──────────────────────────────────────────────────── */
-.app{max-width:900px;margin:0 auto;padding:14px 16px 96px;position:relative;z-index:1;}
+.app{max-width:900px;margin:0 auto;padding:14px 16px 104px;position:relative;z-index:1;}
 .section{display:none;}
 .section.active{display:block;animation:sectionIn .3s var(--ease-out) both;}
 @keyframes sectionIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -572,7 +526,6 @@ textarea{resize:vertical;min-height:70px;}
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:opacity .2s ease!important;transform:none!important;}
   .day-modal,.conf-modal{animation:none;opacity:1;}
-  .tab-indicator{transition:left .16s ease,width .16s ease!important;}
 }
 </style>
 </head>
@@ -598,16 +551,16 @@ textarea{resize:vertical;min-height:70px;}
 </div>
 
 <!-- BOTTOM TAB BAR -->
-<div class="tab-bar" id="tab-bar" role="tablist" aria-label="メインナビゲーション">
-  <div class="tab-indicator" id="tab-indicator" aria-hidden="true"></div>
-  <button class="tab-item active" id="ti-home" onclick="showTab('home',this)" role="tab" aria-selected="true" aria-label="片思い中">
+<div class="tab-bar" id="tab-bar">
+  <div class="tab-pill no-anim" id="tab-pill"></div>
+  <button class="tab-item active" id="ti-home" onclick="showTab('home',this)" aria-label="片思い中">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
       <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
       <path d="M9 21V12h6v9"/>
     </svg>
-    <span class="tab-label">片思い中</span>
+    <span class="tab-label">片思い</span>
   </button>
-  <button class="tab-item" id="ti-cal" onclick="showTab('cal',this)" role="tab" aria-selected="false" aria-label="カレンダー">
+  <button class="tab-item" id="ti-cal" onclick="showTab('cal',this)" aria-label="カレンダー">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
       <rect x="3" y="4" width="18" height="18" rx="3"/>
       <path d="M16 2v4M8 2v4M3 10h18"/>
@@ -617,7 +570,7 @@ textarea{resize:vertical;min-height:70px;}
     </svg>
     <span class="tab-label">カレンダー</span>
   </button>
-  <button class="tab-item" id="ti-stats" onclick="showTab('stats',this)" role="tab" aria-selected="false" aria-label="統計">
+  <button class="tab-item" id="ti-stats" onclick="showTab('stats',this)" aria-label="統計">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
       <path d="M18 20V10M12 20V4M6 20v-6"/>
     </svg>
@@ -701,60 +654,28 @@ var personColors=['#e8698a','#9b6fd4','#3daa88','#e88a50','#4a9fd4','#c0496d','#
 function getColor(p){return p.color||personColors[0];}
 
 // ── TABS ─────────────────────────────────────────────────────
-var tabIndicatorAnimation=null;
-function moveTabIndicator(el,instant){
-  var bar=document.getElementById('tab-bar');
-  var indicator=document.getElementById('tab-indicator');
-  if(!bar||!indicator||!el)return;
-  var barRect=bar.getBoundingClientRect();
-  var tabRect=el.getBoundingClientRect();
-  // The visual rim is an inset shadow, not layout. The first pill receives a
-  // 1px optical correction so its curved edge reads as evenly inset as the
-  // already-balanced trailing pill.
-  var firstTab=bar.querySelector('.tab-item');
-  var opticalOffset=el===firstTab?parseFloat(getComputedStyle(bar).getPropertyValue('--tab-left-optical-adjustment'))||0:0;
-  var target={left:(tabRect.left-barRect.left-opticalOffset)+'px',width:tabRect.width+'px'};
-
-  // Keep the capsule's circular ends intact while it changes size. This is a
-  // tiny isolated element, so animating its two geometry values stays smooth
-  // while avoiding the oval distortion created by scaleX.
-  var current=getComputedStyle(indicator);
-  var from={left:current.left,width:current.width};
-  if(tabIndicatorAnimation)tabIndicatorAnimation.cancel();
-
-  if(instant||window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-    indicator.style.left=target.left;
-    indicator.style.width=target.width;
-    return;
-  }
-  indicator.style.left=target.left;
-  indicator.style.width=target.width;
-  tabIndicatorAnimation=indicator.animate(
-    [from,{left:target.left,width:target.width}],
-    // A small overshoot gives the selected tab a soft, physical landing.
-    {duration:340,easing:'cubic-bezier(.22, 1.16, .36, 1)',fill:'both'}
-  );
-  tabIndicatorAnimation.onfinish=function(){tabIndicatorAnimation=null;};
+function movePill(animate){
+  var pill=document.getElementById('tab-pill');
+  var el=document.querySelector('.tab-item.active');
+  if(!pill||!el)return;
+  if(!animate)pill.classList.add('no-anim');
+  pill.style.left=el.offsetLeft+'px';
+  pill.style.width=el.offsetWidth+'px';
+  if(!animate){void pill.offsetWidth;pill.classList.remove('no-anim');}
 }
-function syncTabIndicator(){
-  moveTabIndicator(document.querySelector('.tab-item.active'),true);
-}
-document.addEventListener('DOMContentLoaded',syncTabIndicator);
-window.addEventListener('resize',syncTabIndicator);
+window.addEventListener('load',function(){movePill(false);});
+window.addEventListener('resize',function(){movePill(false);});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){movePill(false);});
+
 function showTab(tab,el){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.tab-item').forEach(t=>{t.classList.remove('active');t.setAttribute('aria-selected','false');});
+  document.querySelectorAll('.tab-item').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+tab).classList.add('active');
   el.classList.add('active');
-  el.setAttribute('aria-selected','true');
-  moveTabIndicator(el);
-  // Let the first navigation frame reach the display before rendering a tab.
-  requestAnimationFrame(function(){
-    if(!el.classList.contains('active'))return;
-    if(tab==='home') renderHome();
-    if(tab==='cal')  {calPersonId=data.persons.length?data.persons[0].id:null; renderCal();}
-    if(tab==='stats') renderStats();
-  });
+  movePill(true);
+  if(tab==='home') renderHome();
+  if(tab==='cal')  {calPersonId=data.persons.length?data.persons[0].id:null; renderCal();}
+  if(tab==='stats') renderStats();
 }
 
 // ── HOME ─────────────────────────────────────────────────────
