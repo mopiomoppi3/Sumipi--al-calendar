@@ -91,8 +91,8 @@ body::before{
   position:sticky; top:0; z-index:100;
   display:flex; align-items:center; height:52px; padding:0 16px; gap:10px;
   background:rgba(255,245,248,0.72);
-  backdrop-filter:blur(24px) saturate(180%);
-  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  backdrop-filter:blur(10px) saturate(150%);
+  -webkit-backdrop-filter:blur(10px) saturate(150%);
   border-bottom:1px solid rgba(255,255,255,0.5);
   box-shadow:0 1px 0 var(--border);
 }
@@ -121,8 +121,8 @@ body::before{
 .theme-panel{
   position:absolute; top:38px; right:0;
   background:var(--card);
-  backdrop-filter:blur(20px) saturate(160%);
-  -webkit-backdrop-filter:blur(20px) saturate(160%);
+  backdrop-filter:blur(10px) saturate(150%);
+  -webkit-backdrop-filter:blur(10px) saturate(150%);
   border:1px solid rgba(255,255,255,0.6);
   border-radius:16px; padding:12px 14px; gap:10px;
   box-shadow:var(--shadow-md);
@@ -159,8 +159,8 @@ body::before{
   padding:0 8px;
   gap:4px;
   background:rgba(255,245,248,0.82);
-  backdrop-filter:blur(28px) saturate(200%);
-  -webkit-backdrop-filter:blur(28px) saturate(200%);
+  backdrop-filter:blur(10px) saturate(150%);
+  -webkit-backdrop-filter:blur(10px) saturate(150%);
   border-radius:999px;
   border:1px solid rgba(255,255,255,0.7);
   box-shadow:0 4px 24px rgba(192,73,109,0.14), 0 1px 0 rgba(255,255,255,0.5) inset;
@@ -411,8 +411,8 @@ textarea{resize:vertical;min-height:70px;}
 .overlay.center{align-items:center;padding:16px;}
 .day-modal{
   background:var(--card);
-  backdrop-filter:blur(24px) saturate(180%);
-  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  backdrop-filter:blur(10px) saturate(150%);
+  -webkit-backdrop-filter:blur(10px) saturate(150%);
   border:1px solid rgba(255,255,255,0.65);
   border-radius:var(--r-xl) var(--r-xl) 0 0;
   padding:20px 20px 32px; width:100%; max-width:500px; max-height:88vh; overflow-y:auto;
@@ -513,8 +513,8 @@ textarea{resize:vertical;min-height:70px;}
 
 /* ── CONFIRM ─────────────────────────────────────────────────── */
 .conf-modal{
-  background:var(--card); backdrop-filter:blur(24px) saturate(180%);
-  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  background:var(--card); backdrop-filter:blur(10px) saturate(150%);
+  -webkit-backdrop-filter:blur(10px) saturate(150%);
   border:1px solid rgba(255,255,255,0.65);
   border-radius:var(--r-xl); padding:24px; max-width:340px; width:100%;
   box-shadow:var(--shadow-lg); animation:modalPop .28s var(--spring) both;
@@ -526,7 +526,7 @@ textarea{resize:vertical;min-height:70px;}
 [data-theme=white]{--rose:#1c1c1e;--deep:#000;--blush:#d1d1d6;--petal:#f2f2f7;--cream:#fff;--card:#fffffff0;--text:#1c1c1e;--sub:#5c5c60;--muted:#8e8e93;--border:rgba(0,0,0,.08);--shadow-sm:0 1px 3px rgba(0,0,0,.05),0 4px 14px rgba(0,0,0,.06);--shadow-md:0 4px 12px rgba(0,0,0,.07),0 16px 40px rgba(0,0,0,.09);--shadow-lg:0 8px 24px rgba(0,0,0,.09),0 32px 64px rgba(0,0,0,.12);--g1:rgba(0,0,0,.03);--g2:rgba(0,0,0,.02);--g3:rgba(0,0,0,.015);}
 [data-theme=white] .tab-pill{box-shadow:0 4px 14px rgba(0,0,0,.22);}
 /* 背景を半透明にして、下のコンテンツが本当にぼけて透けるように */
-.header.header,.tab-bar.tab-bar{background:color-mix(in srgb,var(--cream) 50%,transparent);backdrop-filter:blur(30px) saturate(190%);-webkit-backdrop-filter:blur(30px) saturate(190%);}
+.header.header,.tab-bar.tab-bar{background:color-mix(in srgb,var(--cream) 50%,transparent);backdrop-filter:blur(10px) saturate(150%);-webkit-backdrop-filter:blur(10px) saturate(150%);}
 .hdr-actions{display:flex;gap:8px;align-items:center;}
 .hdr-btn{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.75);background:color-mix(in srgb,var(--cream) 70%,transparent);color:var(--rose);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 1px 6px var(--border);transition:transform .15s var(--spring);}
 .hdr-btn:active{transform:scale(.86);}
@@ -542,6 +542,85 @@ textarea{resize:vertical;min-height:70px;}
 @media (hover:none){.del-btn{opacity:.55;}}
 .today-btn{margin-left:auto;padding:5px 13px;border-radius:999px;border:1.5px solid var(--blush);background:color-mix(in srgb,var(--cream) 70%,transparent);color:var(--rose);font:600 .72rem 'Zen Maru Gothic',sans-serif;cursor:pointer;transition:transform .14s var(--spring);}
 .today-btn:active{transform:scale(.92);}
+
+/* ── v5: features ── */
+.p-mile{font-size:.66rem;color:var(--sub);margin-top:8px;padding:4px 9px;border-radius:999px;background:var(--petal);display:inline-block;}
+.p-quick{display:block;width:100%;margin-top:10px;padding:8px 0;border-radius:999px;border:none;background:var(--qc,var(--rose));color:#fff;font:700 .74rem 'Zen Maru Gothic',sans-serif;cursor:pointer;transition:transform .14s var(--spring);}
+.p-quick:active{transform:scale(.94);}
+.month-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;}
+.month-sum div{background:var(--card);border:1px solid rgba(255,255,255,.65);border-radius:var(--r-md);padding:12px 6px;text-align:center;box-shadow:var(--shadow-sm);}
+.month-sum b{display:block;font-family:'Klee One',cursive;font-size:1.4rem;color:var(--deep);letter-spacing:-.02em;line-height:1.1;}
+.month-sum span{font-size:.62rem;color:var(--muted);}
+.month-photos{display:flex;gap:8px;overflow-x:auto;margin-top:12px;padding-bottom:4px;scroll-snap-type:x proximity;}
+.month-photos img{width:84px;height:84px;object-fit:cover;border-radius:var(--r-sm);flex-shrink:0;scroll-snap-align:start;cursor:pointer;transition:transform .14s var(--spring);}
+.month-photos img:active{transform:scale(.94);}
+
+/* ── v6 ── */
+.av{border-radius:50%;object-fit:cover;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;margin-bottom:10px;flex-shrink:0;}
+.set-person .av{margin:0;}
+.p-rel{margin-left:6px;font-size:.58rem;font-weight:600;color:var(--rose);background:var(--petal);padding:2px 7px;border-radius:999px;vertical-align:middle;}
+.p-mutual{display:block;width:100%;margin-top:6px;padding:7px 0;border-radius:999px;border:1.5px solid var(--rose);background:transparent;color:var(--rose);font:700 .72rem 'Zen Maru Gothic',sans-serif;cursor:pointer;transition:transform .14s var(--spring);}
+.p-mutual:active{transform:scale(.94);}
+.sel{border:1.5px solid var(--petal);border-radius:12px;padding:8px 10px;font:inherit;font-size:.82rem;background:rgba(255,255,255,.85);color:var(--text);outline:none;}
+.file-in{font-size:.78rem;border:none!important;padding:6px 0!important;background:none!important;}
+.set-group{background:var(--card);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.65);border-radius:var(--r-lg);padding:6px 16px 10px;margin-bottom:12px;box-shadow:var(--shadow-sm);}
+.set-title{font-size:.66rem;color:var(--muted);font-weight:600;letter-spacing:.05em;padding:10px 0 2px;}
+.set-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border);font-size:.86rem;}
+.set-row:last-child{border-bottom:none;}
+.tg{position:relative;width:46px;height:28px;flex-shrink:0;}
+.tg input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer;z-index:1;}
+.tg i{position:absolute;inset:0;border-radius:999px;background:var(--blush);transition:background .2s;}
+.tg i::after{content:'';position:absolute;top:2px;left:2px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.22);transition:transform .32s var(--spring);}
+.tg input:checked+i{background:var(--rose);}
+.tg input:checked+i::after{transform:translateX(18px);}
+.seg{display:flex;background:var(--petal);border-radius:999px;padding:3px;}
+.seg button{border:none;background:none;padding:5px 13px;border-radius:999px;font:600 .74rem 'Zen Maru Gothic',sans-serif;color:var(--sub);cursor:pointer;transition:background .2s,color .2s;}
+.seg button.on{background:var(--rose);color:#fff;}
+.set-person{padding:12px 0;border-bottom:1px solid var(--border);}
+.set-person:last-child{border-bottom:none;}
+.sp-top{display:flex;align-items:center;gap:10px;}
+.sp-btns{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 8px;}
+.mini{padding:6px 12px;border-radius:999px;border:1.5px solid var(--blush);background:rgba(255,255,255,.7);color:var(--sub);font:600 .7rem 'Zen Maru Gothic',sans-serif;cursor:pointer;}
+.mini.hot{border-color:var(--rose);color:var(--rose);}
+.song-in{font-size:.78rem!important;padding:8px 11px!important;}
+.cele{position:fixed;inset:0;z-index:600;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(20,8,14,.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:fadeIn .25s ease both;}
+.cele-card{background:var(--card);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.7);border-radius:var(--r-xl);padding:28px 24px;max-width:320px;width:100%;text-align:center;box-shadow:var(--shadow-lg);animation:modalPop .4s var(--spring) both;}
+.cele-card h2{font-family:'Klee One',cursive;font-size:1.3rem;color:var(--deep);margin:10px 0 8px;}
+.cele-card p{font-size:.84rem;line-height:1.8;color:var(--sub);margin-bottom:18px;}
+.cele-card b{color:var(--rose);font-size:1.05rem;}
+.cele-heart{width:72px;height:72px;animation:pulse 1s var(--spring) infinite alternate;}
+@keyframes pulse{from{transform:scale(.9)}to{transform:scale(1.12)}}
+.pt{position:fixed;z-index:700;pointer-events:none;border-radius:2px;will-change:transform;}
+
+/* ── v7: glass pill, dashboard ── */
+.tab-bar.tab-bar{width:360px;}
+.tab-pill.tab-pill{background:color-mix(in srgb,var(--rose) 18%,transparent);border:1px solid rgba(255,255,255,.6);backdrop-filter:blur(8px) saturate(150%);-webkit-backdrop-filter:blur(8px) saturate(150%);box-shadow:0 2px 10px var(--border),inset 0 1px 0 rgba(255,255,255,.55);}
+.tab-item.active{color:var(--deep);}
+body.no-dash #ti-dash{display:none;}
+.wg{position:relative;background:var(--card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.65);border-radius:var(--r-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm);animation:sectionIn .3s var(--ease-out) both;}
+.wg-x{position:absolute;top:10px;right:12px;border:none;background:none;color:var(--muted);font:600 .68rem 'Zen Maru Gothic',sans-serif;cursor:pointer;padding:4px 6px;border-radius:8px;}
+.wg-x:active{background:var(--petal);}
+.wg-title{font-size:.66rem;color:var(--muted);font-weight:700;letter-spacing:.05em;margin-bottom:10px;}
+.wg-note{font-size:.8rem;color:var(--sub);line-height:1.7;}
+.wx-top{display:flex;align-items:baseline;gap:12px;}
+.wx-t{font-family:'Klee One',cursive;font-size:2.6rem;color:var(--deep);letter-spacing:-.03em;line-height:1;}
+.wx-l{font-size:.9rem;color:var(--text);font-weight:600;}
+.wx-p{font-size:.68rem;color:var(--muted);}
+.wx-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--border);font-size:.8rem;}
+.wx-row b{width:34px;color:var(--sub);}.wx-row span{flex:1;color:var(--text);}.wx-row em{font-style:normal;color:var(--muted);font-size:.7rem;}
+.mu{display:flex;gap:14px;align-items:center;}
+.mu img,.mu .mu-ph{width:84px;height:84px;border-radius:var(--r-md);object-fit:cover;flex-shrink:0;background:var(--petal);box-shadow:var(--shadow-sm);}
+.mu-n{font-weight:700;font-size:.95rem;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mu-a{font-size:.75rem;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mu-bar{height:4px;border-radius:999px;background:var(--petal);overflow:hidden;margin:10px 0 8px;}
+.mu-bar i{display:block;height:100%;background:var(--rose);border-radius:999px;transition:width .6s linear;}
+.mu-c{display:flex;gap:10px;align-items:center;}
+.mu-c button{width:38px;height:38px;border-radius:50%;border:none;background:var(--petal);color:var(--rose);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .14s var(--spring);}
+.mu-c button.main{width:46px;height:46px;background:var(--rose);color:#fff;}
+.mu-c button:active{transform:scale(.88);}.mu-c svg{width:18px;height:18px;}
+.dash-add{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+.sp-field{width:100%;margin:8px 0 4px;}
+.sp-uri{font-size:.66rem;color:var(--muted);word-break:break-all;line-height:1.6;background:var(--petal);padding:8px 10px;border-radius:var(--r-sm);margin-top:6px;}
 
 /* ── REDUCED MOTION ──────────────────────────────────────────── */
 @media(prefers-reduced-motion:reduce){
@@ -574,7 +653,7 @@ textarea{resize:vertical;min-height:70px;}
       <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
       <path d="M9 21V12h6v9"/>
     </svg>
-    <span class="tab-label">片思い</span>
+    <span class="tab-label">ホーム</span>
   </button>
   <button class="tab-item" id="ti-cal" onclick="showTab('cal',this)" aria-label="カレンダー">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -592,6 +671,14 @@ textarea{resize:vertical;min-height:70px;}
     </svg>
     <span class="tab-label">統計</span>
   </button>
+  <button class="tab-item" id="ti-dash" onclick="showTab('dash',this)" aria-label="ダッシュボード">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7.5" height="9" rx="2"/><rect x="13.5" y="3" width="7.5" height="5.5" rx="2"/><rect x="13.5" y="11.5" width="7.5" height="9.5" rx="2"/><rect x="3" y="15" width="7.5" height="6" rx="2"/></svg>
+    <span class="tab-label">ダッシュ</span>
+  </button>
+  <button class="tab-item" id="ti-set" onclick="showTab('set',this)" aria-label="設定">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
+    <span class="tab-label">設定</span>
+  </button>
 </div>
 
 <div class="app">
@@ -601,6 +688,7 @@ textarea{resize:vertical;min-height:70px;}
   </div>
   <div id="tab-cal" class="section">
     <div class="cal-person-tabs" id="cal-person-tabs"></div>
+    <div id="cal-song" style="margin-bottom:12px"></div>
     <div class="month-nav">
       <button class="nav-btn" onclick="changeMonth(-1)" aria-label="前月">‹</button>
       <div class="month-label" id="month-label"></div>
@@ -612,6 +700,8 @@ textarea{resize:vertical;min-height:70px;}
   <div id="tab-stats" class="section">
     <div id="stats-content"></div>
   </div>
+  <div id="tab-dash" class="section"><div id="dash-content"></div></div>
+  <div id="tab-set" class="section"><div id="set-content"></div></div>
 </div>
 
 <!-- DAY SHEET -->
@@ -715,11 +805,14 @@ function renderHome(){
       var c=getColor(p);
       return '<div class="person-card" onclick="goCal(\''+p.id+'\')" onpointerenter="this.classList.add(\'lifted\')" onpointerleave="this.classList.remove(\'lifted\')">'
         +'<button class="del-btn" onclick="delPerson('+i+',event)" aria-label="削除">✕</button>'
-        +'<div class="p-dot" style="background:'+c+'"></div>'
-        +'<div class="p-name">'+esc(p.name)+'</div>'
+        +avatarHtml(p,c)
+        +'<div class="p-name">'+esc(p.name)+'<span class="p-rel">'+esc(p.rel||'片思い')+'</span></div>'
         +'<div class="p-since">'+fmtDate(p.since)+'から</div>'
         +'<div class="p-days">'+days+'<span> 日間</span></div>'
         +'<div class="p-like">最新の好き度: '+(lastLike!==null?lastLike+'/100':'—')+'</div>'
+        +'<div class="p-mile">'+mileStr(days)+'</div>'
+        +'<button class="p-quick" style="--qc:'+c+'" onclick="quickToday(\''+p.id+'\',event)">今日を記録</button>'
+        +((p.rel||'片思い')==='片思い'?'<button class="p-mutual" onclick="askMutual(\''+p.id+'\',event)">両思いになった</button>':'')
         +'</div>';
     }).join('');
   }
@@ -735,6 +828,7 @@ function renderHome(){
         +'<div class="form-group"><label>好きになった日</label><input type="date" id="n-since" value="'+today()+'"></div>'
       +'</div>'
       +'<div class="form-group" style="margin-bottom:12px"><label>出会った日（任意）</label><input type="date" id="n-met"></div>'
+      +'<div class="form-row"><div class="form-group"><label>関係</label><select class="sel" id="n-rel">'+relOpts()+'</select></div><div class="form-group"><label>アイコン（任意）</label><input type="file" id="n-icon" accept="image/*" class="file-in"></div></div>'
       +'<div class="form-group" style="margin-bottom:16px"><label>カラー</label><div class="color-row">'+colorPick+'</div></div>'
       +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
         +'<button class="btn btn-primary" onclick="addPerson()">追加する</button>'
@@ -961,7 +1055,7 @@ function renderStats(){
   }
   var totalDays=data.persons.reduce((s,p)=>s+getDays(p.since),0);
   var html='<div class="stats-grid">'
-    +'<div class="stat-card"><div class="stat-num">'+data.persons.length+'</div><div class="stat-label">片思い中の人数</div></div>'
+    +'<div class="stat-card"><div class="stat-num">'+data.persons.length+'</div><div class="stat-label">登録した人数</div></div>'
     +'<div class="stat-card"><div class="stat-num">'+totalDays+'</div><div class="stat-label">合計片思い日数</div></div>'
     +'<div class="stat-card"><div class="stat-num">'+data.entries.length+'</div><div class="stat-label">記録の数</div></div>'
     +'</div>';
@@ -1071,7 +1165,7 @@ function openBackup(){
   ov.onclick=function(e){if(e.target===ov)closeBk();};
 }
 function exportData(){
-  var obj={app:'crush-calendar',version:1,exportedAt:new Date().toISOString(),theme:localStorage.getItem('cc-theme')||'pink',persons:data.persons,entries:data.entries};
+  var obj={app:'crush-calendar',version:1,exportedAt:new Date().toISOString(),theme:localStorage.getItem('cc-theme')||'pink',persons:data.persons,entries:data.entries,settings:data.settings};
   var name='kataomoi-backup-'+today()+'.json';
   var blob=new Blob([JSON.stringify(obj)],{type:'application/json'});
   function done(){localStorage.setItem('cc-lastbackup',new Date().toISOString());openBackup();}
@@ -1099,7 +1193,7 @@ function importData(input){
   r.readAsText(f);input.value='';
 }
 function mergeIn(o,replace){
-  if(replace){data={persons:o.persons,entries:o.entries};}
+  if(replace){data={persons:o.persons,entries:o.entries,settings:Object.assign({icons:true,celebrate:true,style:"heart"},o.settings||{})};}
   else{
     var pid={},eid={};
     data.persons.forEach(function(p){pid[p.id]=1;});data.entries.forEach(function(x){eid[x.id]=1;});
@@ -1108,6 +1202,298 @@ function mergeIn(o,replace){
   }
   save();closeConf();closeBk();renderHome();
 }
+
+// ── v5 ──
+function today(){var d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+function mileStr(d){
+  var L=[100,200,300,365,500,730,1000,1095,1500,2000,3000],n=null;
+  for(var i=0;i<L.length;i++){if(L[i]>d){n=L[i];break;}}
+  if(n===null)n=(Math.floor(d/365)+1)*365;
+  return (n%365===0?(n/365)+'年':n+'日')+'まであと'+(n-d)+'日';
+}
+function streak(id){
+  var s={};data.entries.forEach(function(e){if(e.personId===id)s[e.date]=1;});
+  var d=new Date(),n=0;
+  function k(x){return x.getFullYear()+'-'+pad(x.getMonth()+1)+'-'+pad(x.getDate());}
+  if(!s[k(d)])d.setDate(d.getDate()-1);
+  while(s[k(d)]){n++;d.setDate(d.getDate()-1);}
+  return n;
+}
+function spark(ents,c){
+  var t=function(e){return new Date(e.date).getTime();},t0=t(ents[0]),span=Math.max(1,t(ents[ents.length-1])-t0);
+  var pts=ents.map(function(e){return [6+(t(e)-t0)/span*288,54-e.like/100*46];});
+  return '<svg viewBox="0 0 300 60" style="width:100%;height:60px;margin-top:8px;display:block"><polyline points="'+pts.map(function(q){return q[0].toFixed(1)+','+q[1].toFixed(1);}).join(' ')+'" fill="none" stroke="'+c+'" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>'+pts.map(function(q){return '<circle cx="'+q[0].toFixed(1)+'" cy="'+q[1].toFixed(1)+'" r="3" fill="'+c+'"/>';}).join('')+'</svg>';
+}
+function quickToday(id,e){
+  e.stopPropagation();
+  calYear=new Date().getFullYear();calMonth=new Date().getMonth();
+  goCal(id);openDay(today());
+}
+var _rs=renderStats;
+renderStats=function(){
+  _rs();
+  var cards=document.querySelectorAll('.person-stat');
+  data.persons.forEach(function(p,i){
+    var c=cards[i];if(!c)return;
+    var ents=data.entries.filter(function(e){return e.personId===p.id;}).sort(function(a,b){return a.date.localeCompare(b.date);});
+    var x='<div style="font-size:.68rem;color:var(--muted);margin-top:6px">連続記録 '+streak(p.id)+'日 ／ '+mileStr(getDays(p.since))+'</div>';
+    if(ents.length>1)x+=spark(ents,getColor(p));
+    c.insertAdjacentHTML('beforeend',x);
+  });
+};
+var _rcg=renderCalGrid;
+renderCalGrid=function(){
+  _rcg();
+  if(!calPersonId)return;
+  var pre=calYear+'-'+pad(calMonth+1);
+  var es=data.entries.filter(function(e){return e.personId===calPersonId&&e.date.indexOf(pre)===0;});
+  var dd={};es.forEach(function(e){dd[e.date]=1;});
+  var avg=es.length?Math.round(es.reduce(function(s,e){return s+e.like;},0)/es.length):null;
+  var ph=es.filter(function(e){return e.photo;});
+  var x='<div class="month-sum"><div><b>'+Object.keys(dd).length+'</b><span>記録した日</span></div><div><b>'+(avg===null?'—':avg)+'</b><span>今月の平均好き度</span></div><div><b>'+ph.length+'</b><span>写真</span></div></div>';
+  if(ph.length)x+='<div class="month-photos">'+ph.map(function(e){return '<img src="'+e.photo+'" onclick="openDay(\''+e.date+'\')" alt="">';}).join('')+'</div>';
+  document.getElementById('cal-grid-wrap').insertAdjacentHTML('beforeend',x);
+};
+
+// ── v6 ──
+data.settings=Object.assign({icons:true,celebrate:true,style:'heart'},data.settings||{});
+var RELS=['片思い','気になる','友達','両思い','恋人','推し'];
+var HEART='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z';
+function relOpts(v){return RELS.map(function(r){return '<option'+(r===(v||'片思い')?' selected':'')+'>'+r+'</option>';}).join('');}
+function compressImg(f,m,sq,cb){
+  var r=new FileReader();
+  r.onload=function(e){var im=new Image();im.onload=function(){
+    var c=document.createElement('canvas'),g=c.getContext('2d');
+    if(sq){var s=Math.min(im.width,im.height);c.width=c.height=m;g.drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,m,m);}
+    else{var k=Math.min(1,m/Math.max(im.width,im.height));c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);g.drawImage(im,0,0,c.width,c.height);}
+    cb(c.toDataURL('image/jpeg',.85));};im.src=e.target.result;};
+  r.readAsDataURL(f);
+}
+function avatar(p,c,sz){
+  var st='width:'+sz+'px;height:'+sz+'px;font-size:'+Math.round(sz*.42)+'px';
+  if(p.icon)return '<img class="av" style="'+st+'" src="'+p.icon+'" alt="">';
+  return '<div class="av" style="'+st+';background:'+c+'">'+esc((p.name||'?').charAt(0))+'</div>';
+}
+function avatarHtml(p,c){return data.settings.icons?avatar(p,c,40):'<div class="p-dot" style="background:'+c+'"></div>';}
+function addPerson(){
+  var name=document.getElementById('n-name').value.trim(),since=document.getElementById('n-since').value,met=document.getElementById('n-met').value;
+  var rel=document.getElementById('n-rel').value,f=document.getElementById('n-icon').files[0];
+  if(!name){alert('呼び名を入力してね');return;}
+  if(!since){alert('はじまった日を選んでね');return;}
+  function fin(icon){
+    data.persons.push({id:Date.now().toString(),name:name,since:since,met:met||null,color:selColor,rel:rel,icon:icon||null,song:null,mutual:null});
+    save();showAddForm=false;selColor=personColors[0];renderHome();
+  }
+  if(f)compressImg(f,160,true,fin);else fin(null);
+}
+function P(id){return data.persons.find(function(x){return x.id===id;});}
+function setSet(k,v){data.settings[k]=v;save();renderSettings();renderHome();}
+function setRel(id,v){P(id).rel=v;save();renderSettings();renderHome();}
+function setIcon(id,input){var f=input.files[0];if(!f)return;compressImg(f,160,true,function(u){P(id).icon=u;save();renderSettings();renderHome();});}
+function clearIcon(id){P(id).icon=null;save();renderSettings();renderHome();}
+function spEmbed(u){
+  var m=/open\.spotify\.com\/(?:intl-[a-z]+\/)?(track|album|playlist|episode|show|artist)\/([A-Za-z0-9]+)/.exec(u||'');
+  return m?{src:'https://open.spotify.com/embed/'+m[1]+'/'+m[2]+'?utm_source=generator',h:(m[1]==='track'||m[1]==='episode')?80:152}:null;
+}
+function saveSong(id,v){
+  v=v.trim();
+  if(v&&!spEmbed(v)){alert('SpotifyのURL（open.spotify.com/...）を入れてください');return;}
+  P(id).song=v||null;save();
+}
+function updateSong(){
+  var box=document.getElementById('cal-song');if(!box)return;
+  var p=P(calPersonId),e=p&&spEmbed(p.song);
+  if(!e){box.innerHTML='';box.dataset.src='';return;}
+  if(box.dataset.src===e.src)return;
+  box.dataset.src=e.src;
+  box.innerHTML='<iframe src="'+e.src+'" width="100%" height="'+e.h+'" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="border:0;border-radius:14px"></iframe>';
+}
+var _rc=renderCal;renderCal=function(){_rc();updateSong();};
+var _rcg2=renderCalGrid;
+renderCalGrid=function(){
+  _rcg2();
+  var p=P(calPersonId);
+  if(p&&p.mutual){var c=document.querySelector('.cal-cell[onclick*="'+p.mutual+'"] .cal-date');if(c)c.insertAdjacentHTML('beforeend','<span class="cal-mark" style="background:#e8698a">両</span>');}
+};
+// ── mutual ──
+function askMutual(id,e){
+  if(e)e.stopPropagation();
+  var p=P(id);if(!p)return;
+  showConf('両思いになりましたか？',p.name+'さんとの関係を「両思い」にします。',[
+    {label:'まだ',cls:'btn-secondary',fn:closeConf},
+    {label:'両思いになった',cls:'btn-primary',fn:function(){closeConf();doMutual(id);}}
+  ]);
+}
+function doMutual(id){
+  var p=P(id);p.rel='両思い';p.mutual=today();save();renderHome();
+  if(document.getElementById('tab-set').classList.contains('active'))renderSettings();
+  celebrate(p);
+}
+function previewCele(){var p=data.persons[0]||{name:'あの人',since:today()};celebrate(Object.assign({},p,{mutual:p.mutual||today()}),true);}
+function celebrate(p,force){
+  if(!force&&!data.settings.celebrate)return;
+  var d=Math.max(0,Math.round((new Date(p.mutual||today())-new Date(p.since))/86400000));
+  var ov=document.createElement('div');ov.className='cele';
+  ov.innerHTML='<div class="cele-card"><svg class="cele-heart" viewBox="0 0 24 24"><path d="'+HEART+'" fill="#e8698a"/></svg><h2>両思いおめでとう</h2><p>'+esc(p.name)+'さんへの想いが届きました<br>片思いの期間は <b>'+d+'日</b></p><button class="btn btn-primary" id="cele-x">とじる</button></div>';
+  document.body.appendChild(ov);
+  ov.querySelector('#cele-x').onclick=function(){ov.remove();};
+  if(navigator.vibrate)navigator.vibrate([18,40,18]);
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)burst(data.settings.style);
+}
+function burst(style){
+  var cols=['#e8698a','#f2a7c3','#ff8fab','#c9aaee','#ffd36e','#8ed8c0'],cx=innerWidth/2,cy=innerHeight*.42;
+  for(var i=0;i<70;i++){
+    var el=document.createElement('div');el.className='pt';
+    var sz=9+Math.random()*10,col=cols[i%cols.length],hh=style==='heart'?sz:sz*.55;
+    el.style.cssText='left:'+cx+'px;top:'+cy+'px;width:'+sz+'px;height:'+hh+'px;margin:'+(-hh/2)+'px 0 0 '+(-sz/2)+'px;';
+    if(style==='heart')el.innerHTML='<svg viewBox="0 0 24 24" width="100%" height="100%"><path d="'+HEART+'" fill="'+col+'"/></svg>';
+    else el.style.background=col;
+    document.body.appendChild(el);
+    var a=Math.random()*Math.PI*2,r=110+Math.random()*Math.min(innerWidth*.6,280),dx=Math.cos(a)*r,dy=Math.sin(a)*r-70,rot=Math.random()*720-360;
+    var an=el.animate([
+      {transform:'translate(0px,0px) rotate(0deg) scale(.3)',opacity:1},
+      {transform:'translate('+dx+'px,'+dy+'px) rotate('+rot/2+'deg) scale(1)',opacity:1,offset:.45},
+      {transform:'translate('+dx*1.1+'px,'+(dy+260)+'px) rotate('+rot+'deg) scale(.9)',opacity:0}
+    ],{duration:1500+Math.random()*900,easing:'cubic-bezier(.2,.7,.3,1)',delay:Math.random()*120});
+    an.onfinish=(function(n){return function(){n.remove();};})(el);
+  }
+}
+// ── settings tab ──
+function tg(k,on){return '<label class="tg"><input type="checkbox"'+(on?' checked':'')+' onchange="setSet(\''+k+'\',this.checked)"><i></i></label>';}
+function renderSettings(){
+  var s=data.settings,x='';
+  x+='<div class="set-group"><div class="set-title">表示</div>'
+    +'<div class="set-row"><span>人のアイコンを表示</span>'+tg('icons',s.icons)+'</div>'
+    +'<div class="set-row"><span>両思いの演出</span>'+tg('celebrate',s.celebrate)+'</div>'
+    +'<div class="set-row"><span>演出のスタイル</span><div class="seg"><button class="'+(s.style==='heart'?'on':'')+'" onclick="setSet(\'style\',\'heart\')">ハート</button><button class="'+(s.style==='confetti'?'on':'')+'" onclick="setSet(\'style\',\'confetti\')">紙吹雪</button></div></div>'
+    +'<div class="set-row"><span>演出をプレビュー</span><button class="btn btn-secondary" style="padding:6px 14px" onclick="previewCele()">見てみる</button></div></div>';
+  x+='<div class="set-group"><div class="set-title">登録した人</div>';
+  if(!data.persons.length)x+='<div style="font-size:.8rem;color:var(--muted);padding:8px 0">まだ誰も登録されていません</div>';
+  data.persons.forEach(function(p){
+    var c=getColor(p),id=p.id;
+    x+='<div class="set-person"><div class="sp-top">'+avatar(p,c,44)+'<div style="flex:1;min-width:0"><div class="p-name">'+esc(p.name)+'</div>'+(p.mutual?'<div class="p-since">両思いになった日 '+fmtDate(p.mutual)+'</div>':'')+'</div>'
+      +'<select class="sel" onchange="setRel(\''+id+'\',this.value)">'+relOpts(p.rel)+'</select></div>'
+      +'<div class="sp-btns"><label class="mini">アイコンを選ぶ<input type="file" accept="image/*" style="display:none" onchange="setIcon(\''+id+'\',this)"></label>'
+      +(p.icon?'<button class="mini" onclick="clearIcon(\''+id+'\')">アイコンを外す</button>':'')
+      +((p.rel||'片思い')==='片思い'?'<button class="mini hot" onclick="askMutual(\''+id+'\')">両思いになった</button>':'')+'</div>'
+      +'<input type="text" class="song-in" placeholder="Spotifyの曲・プレイリストのURL" value="'+esc(p.song||'')+'" onchange="saveSong(\''+id+'\',this.value)"></div>';
+  });
+  x+='</div><div class="set-group"><div class="set-title">データ</div><div class="set-row"><span>バックアップ・復元</span><button class="btn btn-secondary" style="padding:6px 14px" onclick="openBackup()">開く</button></div></div>';
+  document.getElementById('set-content').innerHTML=x;
+}
+var _st=showTab;showTab=function(t,el){_st(t,el);if(t==='set')renderSettings();};
+
+// ── v7: dashboard ──
+data.settings=Object.assign({dash:true,widgets:['weather','music'],spId:''},data.settings);
+var WG={weather:'天気',music:'ミュージック'};
+function applyDash(){
+  document.body.classList.toggle('no-dash',!data.settings.dash);
+  if(!data.settings.dash&&document.getElementById('tab-dash').classList.contains('active'))showTab('home',document.getElementById('ti-home'));
+  var a=document.querySelector('.tab-item.active');if(a)movePill(false);
+}
+var _ss=setSet;setSet=function(k,v){_ss(k,v);if(k==='dash')applyDash();};
+var _st2=showTab;showTab=function(t,el){_st2(t,el);if(t==='dash')renderDash();};
+applyDash();
+function addWg(w){if(data.settings.widgets.indexOf(w)<0)data.settings.widgets.push(w);save();renderDash();}
+function rmWg(w){data.settings.widgets=data.settings.widgets.filter(function(x){return x!==w;});save();renderDash();}
+function renderDash(){
+  var ws=data.settings.widgets,x='';
+  ws.forEach(function(w){x+='<div class="wg"><button class="wg-x" onclick="rmWg(\''+w+'\')">削除</button><div class="wg-title">'+WG[w]+'</div><div id="wg-'+w+'"></div></div>';});
+  var miss=Object.keys(WG).filter(function(w){return ws.indexOf(w)<0;});
+  if(!ws.length)x+='<div class="empty"><div class="empty-line"></div><p>ウィジェットがありません<br>下から追加できます</p></div>';
+  if(miss.length)x+='<div class="dash-add">'+miss.map(function(w){return '<button class="btn btn-secondary" onclick="addWg(\''+w+'\')">＋ '+WG[w]+'</button>';}).join('')+'</div>';
+  document.getElementById('dash-content').innerHTML=x;
+  if(ws.indexOf('weather')>=0)loadWx(false);
+  if(ws.indexOf('music')>=0){drawMu();pollMu();if(!muT)muT=setInterval(pollMu,5000);}
+}
+// weather (Open-Meteo, no key)
+var wx=null;
+var WXN={0:'快晴',1:'晴れ',2:'晴れ時々くもり',3:'くもり',45:'霧',48:'霧',51:'小雨',53:'霧雨',55:'霧雨',61:'雨',63:'雨',65:'強い雨',71:'雪',73:'雪',75:'大雪',77:'雪',80:'にわか雨',81:'にわか雨',82:'激しいにわか雨',85:'にわか雪',86:'にわか雪',95:'雷雨',96:'雷雨',99:'雷雨'};
+function loadWx(force){
+  var b=document.getElementById('wg-weather');if(!b)return;
+  if(wx&&!force&&Date.now()-wx.t<9e5){drawWx();return;}
+  b.innerHTML='<div class="wg-note">取得中…</div>';
+  function go(la,lo,place){
+    fetch('https://api.open-meteo.com/v1/forecast?latitude='+la+'&longitude='+lo+'&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto&forecast_days=5')
+      .then(function(r){return r.json();}).then(function(j){wx={t:Date.now(),j:j,place:place};drawWx();})
+      .catch(function(){var e=document.getElementById('wg-weather');if(e)e.innerHTML='<div class="wg-note">天気を取得できませんでした。<button class="mini" onclick="loadWx(true)">再読み込み</button></div>';});
+  }
+  if(navigator.geolocation)navigator.geolocation.getCurrentPosition(function(p){go(p.coords.latitude.toFixed(2),p.coords.longitude.toFixed(2),'現在地');},function(){go(35.68,139.76,'東京（位置情報なし）');},{timeout:6000});
+  else go(35.68,139.76,'東京（位置情報なし）');
+}
+function drawWx(){
+  var b=document.getElementById('wg-weather');if(!b||!wx)return;
+  var j=wx.j,c=j.current,d=j.daily,wd=['日','月','火','水','木','金','土'];
+  var x='<div class="wx-top"><div class="wx-t">'+Math.round(c.temperature_2m)+'°</div><div><div class="wx-l">'+(WXN[c.weather_code]||'—')+'</div><div class="wx-p">'+esc(wx.place)+'</div></div></div><div style="margin-top:10px">';
+  d.time.forEach(function(t,i){x+='<div class="wx-row"><b>'+(i===0?'今日':wd[new Date(t).getDay()])+'</b><span>'+(WXN[d.weather_code[i]]||'—')+'</span><em>降水 '+(d.precipitation_probability_max[i]==null?'—':d.precipitation_probability_max[i]+'%')+'</em><span style="flex:none;text-align:right;width:76px">'+Math.round(d.temperature_2m_max[i])+'° / '+Math.round(d.temperature_2m_min[i])+'°</span></div>';});
+  b.innerHTML=x+'</div><button class="mini" style="margin-top:8px" onclick="loadWx(true)">更新</button>';
+}
+// Spotify (PKCE, Web API)
+var SPK='cc-sp',muS=null,muT=null;
+function spTok(){try{return JSON.parse(localStorage.getItem(SPK)||'null');}catch(e){return null;}}
+function b64u(buf){return btoa(String.fromCharCode.apply(null,new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+function spRedirect(){return location.origin+location.pathname;}
+async function spAuth(){
+  var id=data.settings.spId;if(!id){alert('設定でClient IDを入れてください');return;}
+  if(!window.crypto||!crypto.subtle){alert('https のページで開いてください（連携には安全な接続が必要です）');return;}
+  var v=b64u(crypto.getRandomValues(new Uint8Array(48)));localStorage.setItem('cc-spv',v);
+  var ch=b64u(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v)));
+  location.href='https://accounts.spotify.com/authorize?'+new URLSearchParams({client_id:id,response_type:'code',redirect_uri:spRedirect(),code_challenge_method:'S256',code_challenge:ch,scope:'user-read-playback-state user-modify-playback-state',state:'cc'});
+}
+async function spToken(body){
+  var r=await fetch('https://accounts.spotify.com/api/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(body)});
+  var j=await r.json();if(!j.access_token)throw new Error(j.error_description||j.error||'token');
+  var t={a:j.access_token,r:j.refresh_token||(spTok()||{}).r,e:Date.now()+j.expires_in*1000-60000};localStorage.setItem(SPK,JSON.stringify(t));return t;
+}
+async function spApi(m,path){
+  var t=spTok();if(!t)return null;
+  if(Date.now()>t.e)t=await spToken({grant_type:'refresh_token',refresh_token:t.r,client_id:data.settings.spId});
+  return fetch('https://api.spotify.com/v1'+path,{method:m,headers:{Authorization:'Bearer '+t.a}});
+}
+function spOut(){localStorage.removeItem(SPK);muS=null;if(document.getElementById('tab-set').classList.contains('active'))renderSettings();drawMu();}
+async function pollMu(){
+  if(!document.getElementById('wg-music')||!document.getElementById('tab-dash').classList.contains('active')){if(muT){clearInterval(muT);muT=null;}return;}
+  if(!spTok()){drawMu();return;}
+  try{var r=await spApi('GET','/me/player');muS=r.status===204?{none:1}:r.ok?await r.json():{err:r.status};}catch(e){muS={err:'net'};}
+  drawMu();
+}
+function drawMu(){
+  var b=document.getElementById('wg-music');if(!b)return;
+  var s=data.settings;
+  if(!s.spId){b.innerHTML='<div class="wg-note">設定でSpotifyのClient IDを入れると、ここで再生を操作できます。</div><button class="btn btn-secondary" style="margin-top:10px" onclick="showTab(\'set\',document.getElementById(\'ti-set\'))">設定を開く</button>';return;}
+  if(!spTok()){b.innerHTML='<div class="wg-note">Spotifyと連携すると、再生中の曲を表示して操作できます（操作にはPremiumが必要です）。</div><button class="btn btn-primary" style="margin-top:10px" onclick="spAuth()">Spotifyと連携する</button>';return;}
+  if(!muS||muS.none||muS.err||!muS.item){b.innerHTML='<div class="wg-note">'+(muS&&muS.err?'取得できませんでした（'+muS.err+'）。連携し直すと直る場合があります。':'再生中のデバイスがありません。Spotifyアプリで曲を再生すると、ここに表示されます。')+'</div><div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-secondary" onclick="pollMu()">更新</button><button class="btn btn-secondary" onclick="spOut()">連携を解除</button></div>';return;}
+  var it=muS.item,im=it.album&&it.album.images&&(it.album.images[1]||it.album.images[0]),pr=it.duration_ms?Math.min(100,muS.progress_ms/it.duration_ms*100):0;
+  var ic={prev:'<path d="M6 5v14M19 5 9 12l10 7V5z" fill="currentColor"/>',next:'<path d="M18 5v14M5 5l10 7-10 7V5z" fill="currentColor"/>',play:'<path d="M7 4.5v15l13-7.5-13-7.5z" fill="currentColor"/>',pause:'<path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/>'};
+  b.innerHTML='<div class="mu">'+(im?'<img src="'+im.url+'" alt="">':'<div class="mu-ph"></div>')+'<div style="flex:1;min-width:0"><div class="mu-n">'+esc(it.name)+'</div><div class="mu-a">'+esc((it.artists||[]).map(function(a){return a.name;}).join(', '))+'</div><div class="mu-bar"><i style="width:'+pr+'%"></i></div>'
+   +'<div class="mu-c"><button onclick="muCtl(\'previous\')" aria-label="前"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round">'+ic.prev+'</svg></button><button class="main" onclick="muCtl(\''+(muS.is_playing?'pause':'play')+'\')" aria-label="再生/一時停止"><svg viewBox="0 0 24 24">'+(muS.is_playing?ic.pause:ic.play)+'</svg></button><button onclick="muCtl(\'next\')" aria-label="次"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round">'+ic.next+'</svg></button></div></div></div>';
+}
+async function muCtl(a){
+  var m=(a==='pause'||a==='play')?'PUT':'POST';
+  try{var r=await spApi(m,'/me/player/'+a);if(r&&r.status===403)alert('操作にはSpotify Premiumが必要です');}catch(e){}
+  setTimeout(pollMu,400);
+}
+// settings additions
+var _rs2=renderSettings;
+renderSettings=function(){
+  _rs2();
+  var s=data.settings,on=!!spTok();
+  document.getElementById('set-content').insertAdjacentHTML('beforeend',
+    '<div class="set-group"><div class="set-title">ダッシュボード</div><div class="set-row"><span>ダッシュボードのタブを表示</span>'+tg('dash',s.dash)+'</div></div>'
+   +'<div class="set-group"><div class="set-title">Spotify連携</div>'
+   +'<p class="set-note">Spotify Developer Dashboardでアプリを作り、Client IDを入れて「連携する」を押してください。Redirect URIに下のURLを登録します。</p>'
+   +'<input type="text" class="song-in sp-field" id="sp-id" placeholder="Client ID" value="'+esc(s.spId||'')+'" onchange="data.settings.spId=this.value.trim();save();">'
+   +'<div class="sp-uri">'+esc(spRedirect())+'</div>'
+   +'<div class="set-row" style="margin-top:8px"><span>状態：'+(on?'連携済み':'未連携')+'</span>'+(on?'<button class="btn btn-secondary" style="padding:6px 14px" onclick="spOut()">解除</button>':'<button class="btn btn-primary" style="padding:6px 14px" onclick="spAuth()">連携する</button>')+'</div></div>');
+};
+(function(){
+  var q=new URLSearchParams(location.search);
+  if(q.get('code')&&q.get('state')==='cc'){
+    spToken({grant_type:'authorization_code',code:q.get('code'),redirect_uri:spRedirect(),client_id:data.settings.spId,code_verifier:localStorage.getItem('cc-spv')})
+      .then(function(){history.replaceState({},'',spRedirect());if(!data.settings.widgets.includes('music'))data.settings.widgets.push('music');data.settings.dash=true;save();applyDash();showTab('dash',document.getElementById('ti-dash'));})
+      .catch(function(e){history.replaceState({},'',spRedirect());alert('Spotify連携に失敗しました：'+e.message);});
+  }else if(q.get('error')&&q.get('state')==='cc')history.replaceState({},'',spRedirect());
+})();
 
 renderHome();
 </script>
