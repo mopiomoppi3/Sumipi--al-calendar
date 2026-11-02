@@ -622,6 +622,15 @@ body.no-dash #ti-dash{display:none;}
 .sp-field{width:100%;margin:8px 0 4px;}
 .sp-uri{font-size:.66rem;color:var(--muted);word-break:break-all;line-height:1.6;background:var(--petal);padding:8px 10px;border-radius:var(--r-sm);margin-top:6px;}
 
+/* ── v8 ── */
+.tab-item svg{stroke-linecap:round;stroke-linejoin:round;}
+.chip{outline:none;-webkit-tap-highlight-color:transparent;}
+.chip i,.chip.active i{border:none;box-shadow:0 1px 5px rgba(0,0,0,.18);}
+.chip.active i{transform:scale(1.2);}
+.tab-pill.hide{opacity:0;}
+.tab-name{width:120px;padding:7px 11px;font-size:.84rem;}
+.crop-c{touch-action:none;display:block;margin:0 auto;border-radius:18px;background:#222;}
+
 /* ── REDUCED MOTION ──────────────────────────────────────────── */
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:opacity .2s ease!important;transform:none!important;}
@@ -635,6 +644,7 @@ body.no-dash #ti-dash{display:none;}
   <h1>片思いカレンダー</h1>
   <div class="hdr-actions">
     <button class="hdr-btn" onclick="openBackup()" aria-label="バックアップ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 20h14"/></svg></button>
+    <button class="hdr-btn" onclick="openSettings()" aria-label="設定"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button>
     <div class="theme-wrap">
       <button class="hdr-btn" onclick="toggleThemePanel()" aria-label="カラーテーマ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.5-1.9-.3-1 .4-2.1 1.5-2.1h2a4 4 0 0 0 4-4c0-5-4-10-9-10z"/><circle cx="7.5" cy="11" r="1" fill="currentColor"/><circle cx="10.5" cy="7" r="1" fill="currentColor"/><circle cx="15" cy="7.5" r="1" fill="currentColor"/></svg></button>
       <div class="theme-panel" id="theme-panel">
@@ -657,7 +667,7 @@ body.no-dash #ti-dash{display:none;}
   </button>
   <button class="tab-item" id="ti-cal" onclick="showTab('cal',this)" aria-label="カレンダー">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-      <rect x="3" y="4" width="18" height="18" rx="3"/>
+      <rect x="3" y="4" width="18" height="18" rx="5.5"/>
       <path d="M16 2v4M8 2v4M3 10h18"/>
       <circle cx="8" cy="15" r="1" fill="currentColor"/>
       <circle cx="12" cy="15" r="1" fill="currentColor"/>
@@ -672,12 +682,8 @@ body.no-dash #ti-dash{display:none;}
     <span class="tab-label">統計</span>
   </button>
   <button class="tab-item" id="ti-dash" onclick="showTab('dash',this)" aria-label="ダッシュボード">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7.5" height="9" rx="2"/><rect x="13.5" y="3" width="7.5" height="5.5" rx="2"/><rect x="13.5" y="11.5" width="7.5" height="9.5" rx="2"/><rect x="3" y="15" width="7.5" height="6" rx="2"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7.5" height="9" rx="3.4"/><rect x="13.5" y="3" width="7.5" height="5.5" rx="3"/><rect x="13.5" y="11.5" width="7.5" height="9.5" rx="3.4"/><rect x="3" y="15" width="7.5" height="6" rx="3"/></svg>
     <span class="tab-label">ダッシュ</span>
-  </button>
-  <button class="tab-item" id="ti-set" onclick="showTab('set',this)" aria-label="設定">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
-    <span class="tab-label">設定</span>
   </button>
 </div>
 
@@ -1460,7 +1466,7 @@ async function pollMu(){
 function drawMu(){
   var b=document.getElementById('wg-music');if(!b)return;
   var s=data.settings;
-  if(!s.spId){b.innerHTML='<div class="wg-note">設定でSpotifyのClient IDを入れると、ここで再生を操作できます。</div><button class="btn btn-secondary" style="margin-top:10px" onclick="showTab(\'set\',document.getElementById(\'ti-set\'))">設定を開く</button>';return;}
+  if(!s.spId){b.innerHTML='<div class="wg-note">設定でSpotifyのClient IDを入れると、ここで再生を操作できます。</div><button class="btn btn-secondary" style="margin-top:10px" onclick="openSettings()">設定を開く</button>';return;}
   if(!spTok()){b.innerHTML='<div class="wg-note">Spotifyと連携すると、再生中の曲を表示して操作できます（操作にはPremiumが必要です）。</div><button class="btn btn-primary" style="margin-top:10px" onclick="spAuth()">Spotifyと連携する</button>';return;}
   if(!muS||muS.none||muS.err||!muS.item){b.innerHTML='<div class="wg-note">'+(muS&&muS.err?'取得できませんでした（'+muS.err+'）。連携し直すと直る場合があります。':'再生中のデバイスがありません。Spotifyアプリで曲を再生すると、ここに表示されます。')+'</div><div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-secondary" onclick="pollMu()">更新</button><button class="btn btn-secondary" onclick="spOut()">連携を解除</button></div>';return;}
   var it=muS.item,im=it.album&&it.album.images&&(it.album.images[1]||it.album.images[0]),pr=it.duration_ms?Math.min(100,muS.progress_ms/it.duration_ms*100):0;
@@ -1494,6 +1500,100 @@ renderSettings=function(){
       .catch(function(e){history.replaceState({},'',spRedirect());alert('Spotify連携に失敗しました：'+e.message);});
   }else if(q.get('error')&&q.get('state')==='cc')history.replaceState({},'',spRedirect());
 })();
+
+// ── v8 ──
+var TABS=[['home','ti-home','ホーム'],['cal','ti-cal','カレンダー'],['stats','ti-stats','統計'],['dash','ti-dash','ダッシュ']];
+data.settings=Object.assign({tabNames:{},tabsShow:{},mileEvent:true},data.settings);
+function tabShown(k){return k==='dash'?!!data.settings.dash:data.settings.tabsShow[k]!==false;}
+function applyTabs(){
+  TABS.forEach(function(t){var el=document.getElementById(t[1]);if(!el)return;
+    el.style.display=tabShown(t[0])?'':'none';
+    var lb=el.querySelector('.tab-label');lb.textContent=(data.settings.tabNames[t[0]]||'').trim()||t[2];
+    el.setAttribute('aria-label',lb.textContent);});
+  var act=document.querySelector('.tab-item.active');
+  if(act&&getComputedStyle(act).display==='none'){var f=TABS.filter(function(t){return tabShown(t[0]);})[0];if(f)showTab(f[0],document.getElementById(f[1]));}
+  else if(act)movePill(false);
+}
+function toggleTab(k){
+  var on=tabShown(k);
+  if(on&&TABS.filter(function(t){return tabShown(t[0]);}).length<=1){alert('タブは1つ以上表示してください');return;}
+  if(k==='dash'){data.settings.dash=!on;applyDash();}else data.settings.tabsShow[k]=!on;
+  save();applyTabs();renderSettings();
+}
+function renameTab(k,v){data.settings.tabNames[k]=v.trim().slice(0,6);save();applyTabs();}
+function toggleMile(){data.settings.mileEvent=!data.settings.mileEvent;save();renderSettings();}
+function sw2(on,fn){return tg('x',on).replace(/onclick="[^"]*"/,'onclick="'+fn+'"');}
+var _rs3=renderSettings;
+renderSettings=function(){
+  _rs3();
+  var sc=document.getElementById('set-content');
+  Array.prototype.forEach.call(sc.querySelectorAll('.set-group'),function(g){var t=g.querySelector('.set-title');if(t&&t.textContent==='ダッシュボード')g.remove();});
+  sc.insertAdjacentHTML('afterbegin','<div class="set-group"><div class="set-title">タブバー（名前と表示）</div>'+TABS.map(function(t){
+    return '<div class="set-row"><input type="text" class="tab-name" maxlength="6" value="'+esc(data.settings.tabNames[t[0]]||'')+'" placeholder="'+t[2]+'" onchange="renameTab(\''+t[0]+'\',this.value)">'+sw2(tabShown(t[0]),'toggleTab(\''+t[0]+'\')')+'</div>';}).join('')
+    +'<p class="set-note">名前は6文字までです。空にすると元の名前に戻ります。</p></div>'
+    +'<div class="set-group"><div class="set-title">記念日</div><div class="set-row"><span>記念日のお祝い<small>100日・200日・1年などになった日に演出します</small></span>'+sw2(data.settings.mileEvent,'toggleMile()')+'</div></div>');
+};
+function openSettings(){
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.tab-item').forEach(function(t){t.classList.remove('active');});
+  document.getElementById('tab-set').classList.add('active');
+  document.getElementById('tab-pill').classList.add('hide');
+  renderSettings();window.scrollTo(0,0);
+}
+var _st3=showTab;
+showTab=function(t,el){document.getElementById('tab-pill').classList.remove('hide');_st3(t,el);};
+// milestones
+function reachedMile(d){
+  var best=0;[100,200,300,365,500,730,1000,1095,1500,2000,3000].forEach(function(m){if(m<=d&&m>best)best=m;});
+  var y=Math.floor(d/365)*365;return y>best?y:best;
+}
+function mlabel(m){return m%365===0?(m/365)+'年':m+'日';}
+function checkMiles(){
+  var ev=[],ch=false;
+  data.persons.forEach(function(p){var r=reachedMile(getDays(p.since));
+    if(p.mileDone===undefined){p.mileDone=r;ch=true;}
+    else if(r>p.mileDone&&data.settings.mileEvent){p.mileDone=r;ch=true;ev.push(p.name+'さん '+mlabel(r));}});
+  if(ch)save();
+  if(ev.length){try{burst();}catch(e){}showConf('記念日おめでとう！','好きになってから '+ev.join('、')+' になりました。',[{label:'ありがとう',cls:'btn-primary',fn:closeConf}]);}
+}
+document.addEventListener('visibilitychange',function(){if(!document.hidden)checkMiles();});
+// image crop
+var _ci=compressImg;
+compressImg=function(f,m,sq,cb){if(!sq)return _ci(f,m,sq,cb);openCrop(f,Math.max(m,240),cb);};
+function openCrop(f,m,cb){
+  var url=URL.createObjectURL(f),im=new Image();
+  im.onload=function(){
+    var V=Math.min(280,innerWidth-80),w=im.width,hh=im.height,base=V/Math.min(w,hh),z=1,ox=0,oy=0;
+    var ov=document.createElement('div');ov.className='overlay center';ov.style.zIndex=700;
+    ov.innerHTML='<div class="conf-modal" style="max-width:340px;text-align:center"><h2>トリミング</h2><p style="margin-bottom:12px">ドラッグで位置、スライダーで拡大します</p><canvas class="crop-c" width="'+V+'" height="'+V+'"></canvas><input type="range" min="1" max="4" step="0.01" value="1" style="width:80%;margin:14px 0 4px;accent-color:var(--rose)"><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px"><button class="btn btn-secondary" data-a="c">キャンセル</button><button class="btn btn-primary" data-a="o">決定</button></div></div>';
+    document.body.appendChild(ov);
+    var cv=ov.querySelector('canvas'),cx=cv.getContext('2d'),sl=ov.querySelector('input');
+    function sW(){return w*base*z;}function sH(){return hh*base*z;}
+    function clamp(){ox=Math.min(0,Math.max(V-sW(),ox));oy=Math.min(0,Math.max(V-sH(),oy));}
+    ox=(V-sW())/2;oy=(V-sH())/2;
+    function draw(){cx.clearRect(0,0,V,V);cx.drawImage(im,ox,oy,sW(),sH());
+      cx.save();cx.fillStyle='rgba(20,8,14,.5)';cx.beginPath();cx.rect(0,0,V,V);cx.arc(V/2,V/2,V/2-4,0,Math.PI*2,true);cx.fill('evenodd');cx.restore();
+      cx.strokeStyle='rgba(255,255,255,.9)';cx.lineWidth=2;cx.beginPath();cx.arc(V/2,V/2,V/2-4,0,Math.PI*2);cx.stroke();}
+    function setZ(nz){var a=(V/2-ox)/sW(),b=(V/2-oy)/sH();z=nz;ox=V/2-a*sW();oy=V/2-b*sH();clamp();draw();}
+    sl.oninput=function(){setZ(+sl.value);};
+    var ps={};
+    cv.onpointerdown=function(e){cv.setPointerCapture(e.pointerId);ps[e.pointerId]=[e.clientX,e.clientY];};
+    cv.onpointermove=function(e){var p=ps[e.pointerId];if(!p)return;var ids=Object.keys(ps);
+      if(ids.length===2){var a=ps[ids[0]],b=ps[ids[1]];ps[e.pointerId]=[e.clientX,e.clientY];var a2=ps[ids[0]],b2=ps[ids[1]];
+        var d1=Math.hypot(a[0]-b[0],a[1]-b[1]),d2=Math.hypot(a2[0]-b2[0],a2[1]-b2[1]);
+        if(d1>0){var nz=Math.min(4,Math.max(1,z*d2/d1));sl.value=nz;setZ(nz);}return;}
+      ox+=e.clientX-p[0];oy+=e.clientY-p[1];ps[e.pointerId]=[e.clientX,e.clientY];clamp();draw();};
+    cv.onpointerup=cv.onpointercancel=function(e){delete ps[e.pointerId];};
+    function close(){ov.remove();URL.revokeObjectURL(url);}
+    ov.querySelector('[data-a=c]').onclick=close;
+    ov.querySelector('[data-a=o]').onclick=function(){var o=document.createElement('canvas');o.width=o.height=m;var k=m/V;
+      o.getContext('2d').drawImage(im,ox*k,oy*k,sW()*k,sH()*k);close();cb(o.toDataURL('image/jpeg',.88));};
+    draw();
+  };
+  im.src=url;
+}
+applyTabs();
+setTimeout(checkMiles,700);
 
 renderHome();
 </script>
