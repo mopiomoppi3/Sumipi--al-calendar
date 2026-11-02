@@ -645,6 +645,29 @@ body.no-dash #ti-dash{display:none;}
 .seg-pill{position:absolute;top:0;left:0;width:0;height:0;border-radius:999px;pointer-events:none;z-index:0;background:color-mix(in srgb,var(--rose) 18%,transparent);border:1px solid rgba(255,255,255,.6);backdrop-filter:blur(8px) saturate(150%);-webkit-backdrop-filter:blur(8px) saturate(150%);box-shadow:0 2px 10px var(--border),inset 0 1px 0 rgba(255,255,255,.55);transition:left .32s cubic-bezier(0.14,1.25,0.3,1),width .40s cubic-bezier(0.16,1.15,0.3,1);}
 .seg-pill.no-anim{transition:none;}
 
+/* ── v10: hamburger menu, no top bar ── */
+.app{padding-top:calc(56px + env(safe-area-inset-top,0px));}
+.menu-wrap{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));right:14px;z-index:150;}
+.menu-btn{width:40px;height:40px;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.7);background:color-mix(in srgb,var(--cream) 55%,transparent);backdrop-filter:blur(10px) saturate(160%);-webkit-backdrop-filter:blur(10px) saturate(160%);box-shadow:0 2px 12px var(--border);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:transform .16s var(--spring);-webkit-tap-highlight-color:transparent;}
+.menu-btn:active{transform:scale(.88);}
+.menu-btn span{display:block;width:16px;height:2px;border-radius:2px;background:var(--deep);transition:transform .36s cubic-bezier(0.14,1.25,0.3,1),opacity .2s,width .3s;}
+.menu-btn span:nth-child(2){width:10px;align-self:center;}
+.menu-wrap.open .menu-btn span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+.menu-wrap.open .menu-btn span:nth-child(2){opacity:0;transform:scaleX(.2);}
+.menu-wrap.open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+.menu-panel{position:absolute;top:50px;right:0;width:240px;padding:8px;border-radius:24px;background:color-mix(in srgb,var(--cream) 62%,transparent);backdrop-filter:blur(14px) saturate(170%);-webkit-backdrop-filter:blur(14px) saturate(170%);border:1px solid rgba(255,255,255,.7);box-shadow:var(--shadow-md);transform-origin:top right;transform:scale(.82) translateY(-6px);opacity:0;pointer-events:none;transition:transform .38s cubic-bezier(0.14,1.25,0.3,1),opacity .18s;}
+.menu-wrap.open .menu-panel{transform:none;opacity:1;pointer-events:auto;}
+.menu-item{display:flex;align-items:center;gap:12px;width:100%;padding:12px;border:none;background:none;border-radius:16px;font:600 .88rem 'Zen Maru Gothic',sans-serif;color:var(--text);text-align:left;cursor:pointer;opacity:0;transform:translateY(-8px);transition:transform .38s cubic-bezier(0.14,1.25,0.3,1),opacity .2s,background .15s;}
+.menu-wrap.open .menu-item{opacity:1;transform:none;}
+.menu-wrap.open .menu-item:nth-of-type(2){transition-delay:.04s;}
+.menu-wrap.open .menu-theme{transition-delay:.08s;}
+.menu-item:active{background:color-mix(in srgb,var(--rose) 14%,transparent);}
+.menu-item svg{width:20px;height:20px;color:var(--rose);flex-shrink:0;}
+.menu-sep{height:1px;background:var(--border);margin:4px 10px;}
+.menu-theme{display:block;cursor:default;padding:8px 10px 12px;}
+.menu-theme:active{background:none;}
+.menu-theme .lbl{font-size:.64rem;color:var(--muted);font-weight:700;letter-spacing:.05em;margin:2px 0 12px;}
+
 /* ── REDUCED MOTION ──────────────────────────────────────────── */
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:opacity .2s ease!important;transform:none!important;}
@@ -654,18 +677,13 @@ body.no-dash #ti-dash{display:none;}
 </head>
 <body>
 
-<div class="header">
-  <h1>片思いカレンダー</h1>
-  <div class="hdr-actions">
-    <button class="hdr-btn" onclick="openBackup()" aria-label="バックアップ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 20h14"/></svg></button>
-    <button class="hdr-btn" onclick="openSettings()" aria-label="設定"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button>
-    <div class="theme-wrap">
-      <button class="hdr-btn" onclick="toggleThemePanel()" aria-label="カラーテーマ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.5-1.9-.3-1 .4-2.1 1.5-2.1h2a4 4 0 0 0 4-4c0-5-4-10-9-10z"/><circle cx="7.5" cy="11" r="1" fill="currentColor"/><circle cx="10.5" cy="7" r="1" fill="currentColor"/><circle cx="15" cy="7.5" r="1" fill="currentColor"/></svg></button>
-      <div class="theme-panel" id="theme-panel">
-        <div class="theme-panel-label">カラーテーマ</div>
-        <div class="chips"><button class="chip active" data-t="pink" onclick="setTheme('pink')"><i class="sw-pink"></i>ピンク</button><button class="chip" data-t="lavender" onclick="setTheme('lavender')"><i class="sw-lavender"></i>ラベンダー</button><button class="chip" data-t="mint" onclick="setTheme('mint')"><i class="sw-mint"></i>ミント</button><button class="chip" data-t="peach" onclick="setTheme('peach')"><i class="sw-peach"></i>ピーチ</button><button class="chip" data-t="sky" onclick="setTheme('sky')"><i class="sw-sky"></i>スカイ</button><button class="chip" data-t="white" onclick="setTheme('white')"><i class="c-white"></i>ホワイト</button></div>
-      </div>
-    </div>
+<div class="menu-wrap theme-wrap" id="menu-wrap">
+  <button class="menu-btn" onclick="toggleMenu()" aria-label="メニュー"><span></span><span></span><span></span></button>
+  <div class="menu-panel">
+    <button class="menu-item" onclick="menuGo(openSettings)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg>設定</button>
+    <button class="menu-item" onclick="menuGo(openBackup)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 20h14"/></svg>バックアップ</button>
+    <div class="menu-sep"></div>
+    <div class="menu-item menu-theme" id="theme-panel"><div class="lbl">テーマカラー</div><div class="chips"><button class="chip active" data-t="pink" onclick="setTheme('pink')"><i class="sw-pink"></i>ピンク</button><button class="chip" data-t="lavender" onclick="setTheme('lavender')"><i class="sw-lavender"></i>ラベンダー</button><button class="chip" data-t="mint" onclick="setTheme('mint')"><i class="sw-mint"></i>ミント</button><button class="chip" data-t="peach" onclick="setTheme('peach')"><i class="sw-peach"></i>ピーチ</button><button class="chip" data-t="sky" onclick="setTheme('sky')"><i class="sw-sky"></i>スカイ</button><button class="chip" data-t="white" onclick="setTheme('white')"><i class="c-white"></i>ホワイト</button></div></div>
   </div>
 </div>
 
@@ -1636,6 +1654,12 @@ document.addEventListener('click',function(e){
   Array.prototype.forEach.call(seg.querySelectorAll('button'),function(x){x.classList.remove('on');});
   b.classList.add('on');placeSeg(seg,true);
 },true);
+
+// ── v10 ──
+function toggleMenu(f){var w=document.getElementById('menu-wrap');w.classList.toggle('open',f===undefined?!w.classList.contains('open'):f);}
+function menuGo(fn){toggleMenu(false);setTimeout(fn,140);}
+document.addEventListener('pointerdown',function(e){var w=document.getElementById('menu-wrap');if(w.classList.contains('open')&&!w.contains(e.target))toggleMenu(false);});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')toggleMenu(false);});
 
 renderHome();
 </script>
