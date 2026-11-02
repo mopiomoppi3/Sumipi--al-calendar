@@ -631,6 +631,20 @@ body.no-dash #ti-dash{display:none;}
 .tab-name{width:120px;padding:7px 11px;font-size:.84rem;}
 .crop-c{touch-action:none;display:block;margin:0 auto;border-radius:18px;background:#222;}
 
+/* ── v9: tab-bar-style motion on switches and segmented controls ── */
+.tg input:checked+i::after{transform:translateX(18px);}
+.tg i::after{transition:transform .32s cubic-bezier(0.14,1.25,0.3,1),width .22s cubic-bezier(0.14,1.25,0.3,1);}
+.tg i{transition:background .25s var(--ease-out),transform .16s var(--spring);}
+.tg:active i{transform:scale(.95);}
+.tg input:active+i::after{width:32px;}
+.tg input:checked:active+i::after{transform:translateX(10px);}
+.seg{position:relative;}
+.seg button{position:relative;z-index:1;background:none;transition:color .25s var(--ease-out),transform .16s var(--spring);}
+.seg button.on{background:none;color:var(--deep);}
+.seg button:active{transform:scale(.92);}
+.seg-pill{position:absolute;top:0;left:0;width:0;height:0;border-radius:999px;pointer-events:none;z-index:0;background:color-mix(in srgb,var(--rose) 18%,transparent);border:1px solid rgba(255,255,255,.6);backdrop-filter:blur(8px) saturate(150%);-webkit-backdrop-filter:blur(8px) saturate(150%);box-shadow:0 2px 10px var(--border),inset 0 1px 0 rgba(255,255,255,.55);transition:left .32s cubic-bezier(0.14,1.25,0.3,1),width .40s cubic-bezier(0.16,1.15,0.3,1);}
+.seg-pill.no-anim{transition:none;}
+
 /* ── REDUCED MOTION ──────────────────────────────────────────── */
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:opacity .2s ease!important;transform:none!important;}
@@ -1514,24 +1528,24 @@ function applyTabs(){
   if(act&&getComputedStyle(act).display==='none'){var f=TABS.filter(function(t){return tabShown(t[0]);})[0];if(f)showTab(f[0],document.getElementById(f[1]));}
   else if(act)movePill(false);
 }
-function toggleTab(k){
+function toggleTab(k,el){
   var on=tabShown(k);
-  if(on&&TABS.filter(function(t){return tabShown(t[0]);}).length<=1){alert('タブは1つ以上表示してください');return;}
+  if(on&&TABS.filter(function(t){return tabShown(t[0]);}).length<=1){alert('タブは1つ以上表示してください');if(el)el.checked=true;return;}
   if(k==='dash'){data.settings.dash=!on;applyDash();}else data.settings.tabsShow[k]=!on;
-  save();applyTabs();renderSettings();
+  save();applyTabs();
 }
 function renameTab(k,v){data.settings.tabNames[k]=v.trim().slice(0,6);save();applyTabs();}
-function toggleMile(){data.settings.mileEvent=!data.settings.mileEvent;save();renderSettings();}
-function sw2(on,fn){return tg('x',on).replace(/onclick="[^"]*"/,'onclick="'+fn+'"');}
+function toggleMile(v){data.settings.mileEvent=!!v;save();}
+function sw2(on,fn){return tg('x',on).replace(/onchange="[^"]*"/,'onchange="'+fn+'"');}
 var _rs3=renderSettings;
 renderSettings=function(){
   _rs3();
   var sc=document.getElementById('set-content');
   Array.prototype.forEach.call(sc.querySelectorAll('.set-group'),function(g){var t=g.querySelector('.set-title');if(t&&t.textContent==='ダッシュボード')g.remove();});
   sc.insertAdjacentHTML('afterbegin','<div class="set-group"><div class="set-title">タブバー（名前と表示）</div>'+TABS.map(function(t){
-    return '<div class="set-row"><input type="text" class="tab-name" maxlength="6" value="'+esc(data.settings.tabNames[t[0]]||'')+'" placeholder="'+t[2]+'" onchange="renameTab(\''+t[0]+'\',this.value)">'+sw2(tabShown(t[0]),'toggleTab(\''+t[0]+'\')')+'</div>';}).join('')
+    return '<div class="set-row"><input type="text" class="tab-name" maxlength="6" value="'+esc(data.settings.tabNames[t[0]]||'')+'" placeholder="'+t[2]+'" onchange="renameTab(\''+t[0]+'\',this.value)">'+sw2(tabShown(t[0]),'toggleTab(\''+t[0]+'\',this)')+'</div>';}).join('')
     +'<p class="set-note">名前は6文字までです。空にすると元の名前に戻ります。</p></div>'
-    +'<div class="set-group"><div class="set-title">記念日</div><div class="set-row"><span>記念日のお祝い<small>100日・200日・1年などになった日に演出します</small></span>'+sw2(data.settings.mileEvent,'toggleMile()')+'</div></div>');
+    +'<div class="set-group"><div class="set-title">記念日</div><div class="set-row"><span>記念日のお祝い<small>100日・200日・1年などになった日に演出します</small></span>'+sw2(data.settings.mileEvent,'toggleMile(this.checked)')+'</div></div>');
 };
 function openSettings(){
   document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
@@ -1594,6 +1608,34 @@ function openCrop(f,m,cb){
 }
 applyTabs();
 setTimeout(checkMiles,700);
+
+// ── v9 ──
+// 設定の切り替えでは画面を作り直さない（作り直すとアニメーションが消えるため）
+setSet=function(k,v){data.settings[k]=v;save();renderHome();if(k==='dash')applyDash();};
+function placeSeg(seg,animate){
+  var pill=seg.querySelector('.seg-pill'),b=seg.querySelector('button.on');if(!pill)return;
+  if(!b){pill.style.width='0';return;}
+  if(!animate)pill.classList.add('no-anim');
+  pill.style.left=b.offsetLeft+'px';pill.style.top=b.offsetTop+'px';pill.style.width=b.offsetWidth+'px';pill.style.height=b.offsetHeight+'px';
+  if(!animate){void pill.offsetWidth;pill.classList.remove('no-anim');}
+}
+function initSegs(){
+  document.querySelectorAll('.seg').forEach(function(seg){
+    if(!seg.querySelector('.seg-pill')){var d=document.createElement('div');d.className='seg-pill no-anim';seg.insertBefore(d,seg.firstChild);}
+    placeSeg(seg,false);
+  });
+}
+var _rs4=renderSettings;
+renderSettings=function(){_rs4();initSegs();};
+document.addEventListener('click',function(e){
+  var b=e.target.closest&&e.target.closest('.seg button');if(!b)return;
+  var m=/setSet\('(\w+)','(\w+)'\)/.exec(b.getAttribute('onclick')||'');if(!m)return;
+  e.stopPropagation();e.preventDefault();
+  data.settings[m[1]]=m[2];save();
+  var seg=b.parentNode;
+  Array.prototype.forEach.call(seg.querySelectorAll('button'),function(x){x.classList.remove('on');});
+  b.classList.add('on');placeSeg(seg,true);
+},true);
 
 renderHome();
 </script>
